@@ -6,15 +6,14 @@ use App\Models\Url;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class UrlController extends Controller
 {
 
     function generateRandomString(int $minLength, int $maxLength): string
     {
-        if ($minLength > $maxLength) {
-            throw new InvalidArgumentException("Minimum length cannot be greater than maximum length.");
-        }
+        if ($minLength > $maxLength) throw new InvalidArgumentException("Minimum length cannot be greater than maximum length.");
 
         // Generate a random length between the given range
         $length = rand($minLength, $maxLength);
