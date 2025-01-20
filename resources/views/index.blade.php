@@ -1,9 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7LVCT1XS20"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-7LVCT1XS20');
+    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <meta property="og:title" content="No BS URL Shortener - Just does one job">
+    <meta property="og:description" content="Shorten your URLs quickly and efficiently - without giving away who are you. Try it now!">
+    <meta property="og:image" content="{{ asset('images/image.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta name="twitter:card" content="Shorten your URLs quickly and efficiently - without giving away who are you. Just does one job and does it well.">
+    <meta name="twitter:title" content="No BS URL Shortener - Just does one job">
+    <meta name="twitter:description" content="Shorten your URLs quickly and efficiently - without giving away who are you. Try it now!">
+    <meta name="twitter:image" content="{{ asset('images/image.png') }}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>No BS URL Shortener - Just does one job</title>
+    <meta name="description" content="Shorten your URLs quickly and efficiently with our easy-to-use tool. Try it now!">
+    <meta name="keywords" content="URL shortener, link shortener, shorten URL, simplify links">
+    <meta name="author" content="No BS URL Shortener">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         .toast-container {
@@ -66,7 +88,7 @@
 <body class="bg-light">
 <div class="container mt-5">
     <h1 class="text-center">No BS URL Shortener</h1>
-    <p class="mt-5">I understand you are here to get a shortened URL. And that's what you get from this site. No BS!</p>
+    <p class="mt-5">I understand you are here to get a shortened URL. And that's what you get from this site. No BS! 🔥🔥🔥</p>
     <form action="{{ route('shorten') }}" method="POST" class="mt-4">
         @csrf
         <div class="input-group">
