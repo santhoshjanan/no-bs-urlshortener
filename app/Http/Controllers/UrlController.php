@@ -29,7 +29,7 @@ class UrlController extends Controller
             ],
             [
                 'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-                'g-recaptcha-response.captcha' => 'Captcha error! try again later or contact site admin.',
+                'g-recaptcha-response.captcha' => 'Captcha error! Try again. If the problem persists, reach out to me using the contact icon in the footer.',
             ],
         );
 
