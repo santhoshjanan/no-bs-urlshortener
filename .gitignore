@@ -3,10 +3,13 @@
 /public/build
 /public/hot
 /public/storage
+/postgres_data
+/postgres_data/*
 /storage/*.key
 /storage/pail
 /vendor
 .env
+.env.local
 .env.backup
 .env.production
 .phpactor.json

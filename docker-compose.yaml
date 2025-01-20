@@ -1,0 +1,102 @@
+version: '3.8'
+
+networks:
+  urlshortener_network:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: url-shortener
+    container_name: url-shortener
+    restart: unless-stopped
+    ports:
+      - "9000:9000" # Expose on port 9000
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    networks:
+      - urlshortener_network
+    depends_on:
+      - db
+      - cache
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "9080:80" # Expose Nginx on port 8080 for reverse proxy setup
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - urlshortener_network
+    depends_on:
+      - app
+
+  db:
+    image: postgres:latest
+    container_name: urlshorten_postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secretpassword}
+      POSTGRES_DB: ${DB_DATABASE:-urls}
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres_data:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - urlshortener_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: urlshortener_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@urlshortener.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - urlshortener_network
+
+  cache:
+    image: redis/redis-stack:latest
+    container_name: urlshortener_redis
+    ports:
+      - "6379:6379"  # Redis port
+      - "8001:8001"  # RedisInsight port
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - urlshortener_network
+
+volumes:
+  postgres_data:
+    name: urlshortener_postgres_data
+    driver: local
+  pgadmin_data:
+    name: urlshortener_pgadmin_data
+  redis_data:
+    name: urlshortener_redis_data
