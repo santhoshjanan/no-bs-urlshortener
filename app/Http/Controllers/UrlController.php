@@ -23,23 +23,28 @@ class UrlController extends Controller
     }
     public function web_shortener(Request $request)
     {
-        return view('index', $this->shorten($request));
-    }
-
-    public function api_shortener(Request $request){
-        return response()->json($this->shorten($request), 201);
-    }
-    public function shorten(Request $request)
-    {
         $request->validate([
             'original_url' => 'required|url',
             'g-recaptcha-response' => 'required|captcha'
-            ],
+        ],
             [
                 'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
                 'g-recaptcha-response.captcha' => 'Captcha error! Try again. If the problem persists, reach out to me using the contact icon in the footer.',
             ],
         );
+        return view('index', $this->shorten($request));
+    }
+
+    public function api_shortener(Request $request){
+        $request->validate([
+            'original_url' => 'required|url',
+            ],
+        );
+        return response()->json($this->shorten($request), 201);
+    }
+    public function shorten(Request $request)
+    {
+
 
         $shortened = $this->generateRandomString(4, 6);
 
