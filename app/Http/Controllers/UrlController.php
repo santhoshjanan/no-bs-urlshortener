@@ -21,6 +21,14 @@ class UrlController extends Controller
         // Generate and return the random string
         return Str::random($length);
     }
+    public function web_shortener(Request $request)
+    {
+        return view('index', $this->shorten($request));
+    }
+
+    public function api_shortener(Request $request){
+        return response()->json($this->shorten($request), 201);
+    }
     public function shorten(Request $request)
     {
         $request->validate([
@@ -47,7 +55,7 @@ class UrlController extends Controller
 
         Cache::remember($cacheKey, now()->addDays(14), function () use ($url) {return $url;});
 
-        return view('index', ['original_url'=>$request->original_url, 'shortened_url' => url($shortened)]);
+        return ['original_url'=>$request->original_url, 'shortened_url' => url($shortened)];
     }
 
     public function redirect($shortened)
