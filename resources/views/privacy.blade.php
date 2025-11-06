@@ -2,8 +2,6 @@
     'title' => 'Privacy Policy - No BS URL Shortener',
     'description' => 'Our privacy policy. We collect minimal data and respect your privacy. No personal identification data is stored.'
 ])
-
-<main>
     <div class="vb-container" style="margin-top: 3rem;">
         <!-- Page Header -->
         <div class="vb-text-center vb-mb-4">
@@ -182,6 +180,5 @@
             </div>
         </div>
     </div>
-</main>
 
 @include('partials.footer')

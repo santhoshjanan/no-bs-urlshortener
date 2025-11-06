@@ -3,7 +3,6 @@
 @endpush
 
 @include('partials.header')
-    <main>
         <div class="vb-container" style="margin-top: 3rem;">
             <!-- Header -->
             <div class="vb-text-center vb-mb-4">
@@ -112,7 +111,6 @@
                 </div>
             </div>
         </div>
-    </main>
 
 @include('partials.footer')
 

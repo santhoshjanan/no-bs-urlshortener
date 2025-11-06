@@ -1,3 +1,5 @@
+    </main>
+
     <!-- Footer -->
     <footer class="vb-footer">
         <div class="vb-footer-content">

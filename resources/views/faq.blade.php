@@ -2,8 +2,6 @@
     'title' => 'FAQ - No BS URL Shortener',
     'description' => 'Frequently asked questions about No BS URL Shortener. Learn how to use our service, privacy policies, and more.'
 ])
-
-<main>
     <div class="vb-container" style="margin-top: 3rem;">
         <!-- Page Header -->
         <div class="vb-text-center vb-mb-4">
@@ -147,6 +145,5 @@
             </div>
         </div>
     </div>
-</main>
 
 @include('partials.footer')

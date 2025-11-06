@@ -2,8 +2,6 @@
     'title' => 'Terms of Service - No BS URL Shortener',
     'description' => 'Terms of Service for No BS URL Shortener. Please read these terms before using our service.'
 ])
-
-<main>
     <div class="vb-container" style="margin-top: 3rem;">
         <!-- Page Header -->
         <div class="vb-text-center vb-mb-4">
@@ -210,6 +208,5 @@
             </div>
         </div>
     </div>
-</main>
 
 @include('partials.footer')

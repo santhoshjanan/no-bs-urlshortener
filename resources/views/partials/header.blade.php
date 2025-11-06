@@ -95,91 +95,43 @@
             padding-bottom: 100px;
         }
 
-        .vb-nav {
-            background-color: var(--vb-white);
-            border-bottom: var(--vb-border);
-            box-shadow: 0 6px 0 var(--vb-black);
-            padding: 1rem 0;
+        /* Custom styling for navbar to match site design */
+        .vb-navbar {
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .vb-nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .vb-nav-logo {
-            font-weight: 900;
-            font-size: 1.25rem;
-            text-decoration: none;
-            color: var(--vb-black);
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-        }
-
-        .vb-nav-logo:hover {
-            color: var(--vb-primary);
-        }
-
-        .vb-nav-menu {
-            display: flex;
-            gap: 0.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .vb-nav-link {
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            color: var(--vb-black);
-            font-weight: 700;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            border: 2px solid transparent;
-            transition: all 0.15s ease;
-        }
-
-        .vb-nav-link:hover,
-        .vb-nav-link.active {
+        /* Active link styling */
+        .vb-navbar-link.active {
             background: var(--vb-primary);
             border: 2px solid var(--vb-black);
             box-shadow: 2px 2px 0 var(--vb-black);
         }
-
-        @media (max-width: 768px) {
-            .vb-nav-content {
-                flex-direction: column;
-            }
-
-            .vb-nav-menu {
-                width: 100%;
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- Skip link for keyboard users -->
+    <a href="#main-content" class="vb-skip-link">Skip to main content</a>
+
     <!-- Navigation -->
-    <nav class="vb-nav">
-        <div class="vb-nav-content">
-            <a href="{{ route('index') }}" class="vb-nav-logo">No BS URL Shortener</a>
-            <ul class="vb-nav-menu">
-                <li><a href="{{ route('index') }}" class="vb-nav-link {{ request()->routeIs('index') ? 'active' : '' }}">Home</a></li>
-                <li><a href="{{ route('about') }}" class="vb-nav-link {{ request()->routeIs('about') ? 'active' : '' }}">About</a></li>
-                <li><a href="{{ route('faq') }}" class="vb-nav-link {{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a></li>
-                <li><a href="{{ route('privacy') }}" class="vb-nav-link {{ request()->routeIs('privacy') ? 'active' : '' }}">Privacy</a></li>
-                <li><a href="{{ route('terms') }}" class="vb-nav-link {{ request()->routeIs('terms') ? 'active' : '' }}">Terms</a></li>
-            </ul>
-        </div>
+    <nav class="vb-navbar" role="navigation" aria-label="Main navigation">
+        <a href="{{ route('index') }}" class="vb-navbar-brand">No BS URL Shortener</a>
+
+        <!-- Hamburger toggle (auto-hidden on desktop) -->
+        <button class="vb-navbar-toggle" type="button" aria-label="Toggle navigation menu">
+            <span class="vb-navbar-toggle-bar"></span>
+            <span class="vb-navbar-toggle-bar"></span>
+            <span class="vb-navbar-toggle-bar"></span>
+        </button>
+
+        <ul class="vb-navbar-menu">
+            <li><a href="{{ route('index') }}" class="vb-navbar-link {{ request()->routeIs('index') ? 'active' : '' }}">Home</a></li>
+            <li><a href="{{ route('about') }}" class="vb-navbar-link {{ request()->routeIs('about') ? 'active' : '' }}">About</a></li>
+            <li><a href="{{ route('faq') }}" class="vb-navbar-link {{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a></li>
+            <li><a href="{{ route('privacy') }}" class="vb-navbar-link {{ request()->routeIs('privacy') ? 'active' : '' }}">Privacy</a></li>
+            <li><a href="{{ route('terms') }}" class="vb-navbar-link {{ request()->routeIs('terms') ? 'active' : '' }}">Terms</a></li>
+        </ul>
     </nav>
+
+    <main id="main-content">
