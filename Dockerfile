@@ -1,3 +1,20 @@
+# Build stage for Node.js assets
+FROM node:20-alpine AS node-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install npm dependencies
+RUN npm install
+
+# Copy application source
+COPY . .
+
+# Build assets
+RUN npm run build
+
 # Base image
 FROM php:8.3-fpm
 
@@ -36,6 +53,9 @@ RUN mkdir -p /usr/src/php/ext/redis; \
 	docker-php-ext-install redis;
 # Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
+
+# Copy built assets from node-builder stage
+COPY --from=node-builder /app/public/build /var/www/html/public/build
 
 # Copy application code
 VOLUME /var/www/html
