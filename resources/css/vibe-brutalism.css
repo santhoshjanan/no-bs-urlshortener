@@ -265,7 +265,9 @@ body {
 }
 
 .vb-card-static {
-  transition: none;
+  background-color: var(--vb-white);
+  border: var(--vb-border);
+  box-shadow: var(--vb-shadow-lg);
 }
 
 .vb-card-static:hover {
