@@ -1,0 +1,136 @@
+name: SAST Security Scanning
+
+on:
+  push:
+    branches: [ main, develop, master ]
+  pull_request:
+    branches: [ main, develop, master ]
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+
+jobs:
+  codeql-analysis:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript', 'php' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+
+      - name: Setup PHP
+        if: matrix.language == 'php'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo, pdo_pgsql, mbstring, xml, ctype, fileinfo, openssl, tokenizer, json, bcmath
+
+      - name: Setup Node.js
+        if: matrix.language == 'javascript'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install Composer Dependencies
+        if: matrix.language == 'php'
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Install NPM Dependencies
+        if: matrix.language == 'javascript'
+        run: npm ci
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  php-security-scan:
+    name: PHP Security Scanner
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo, pdo_pgsql, mbstring, xml, ctype, fileinfo, openssl, tokenizer, json, bcmath
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run PHPStan
+        run: |
+          composer require --dev phpstan/phpstan --no-interaction || true
+          vendor/bin/phpstan analyse app --level=5 --no-progress || true
+        continue-on-error: true
+
+      - name: Run Psalm
+        run: |
+          composer require --dev vimeo/psalm --no-interaction || true
+          vendor/bin/psalm --no-cache || true
+        continue-on-error: true
+
+      - name: Run PHP CS Fixer (if available)
+        run: |
+          composer require --dev friendsofphp/php-cs-fixer --no-interaction || true
+          vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no || true
+        continue-on-error: true
+
+  dependency-vulnerability-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run Composer Security Audit
+        run: composer audit --format=json --no-interaction
+        continue-on-error: true
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Run NPM Audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run Snyk to test for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+

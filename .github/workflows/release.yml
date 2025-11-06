@@ -1,0 +1,149 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testing
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo, pdo_pgsql, mbstring, xml, ctype, fileinfo, openssl, tokenizer, json, bcmath
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: 'npm'
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        continue-on-error: true
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-dev
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+        continue-on-error: true
+
+      - name: Build Frontend Assets
+        run: npm run build
+
+      - name: Run Tests
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_DATABASE: testing
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          APP_ENV: testing
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction
+          php artisan migrate --force
+          php artisan test
+
+      - name: Create Release Archive
+        run: |
+          tar -czf release.tar.gz \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='.github' \
+            --exclude='tests' \
+            --exclude='postgres_data' \
+            --exclude='storage/logs' \
+            --exclude='.env' \
+            --exclude='.env.example' \
+            .
+
+      - name: Upload Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: release.tar.gz
+          retention-days: 30
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Release Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-package
+
+      - name: Determine Version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
+          files: release.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
