@@ -10,5 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Url extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'original_url',
+        'shortened_url',
+        'analytics',
+    ];
+
+    protected $casts = [
+        'analytics' => 'array',
+    ];
 }
