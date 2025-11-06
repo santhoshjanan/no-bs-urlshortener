@@ -264,6 +264,15 @@ body {
   box-shadow: none;
 }
 
+.vb-card-static {
+  transition: none;
+}
+
+.vb-card-static:hover {
+  transform: none;
+  box-shadow: var(--vb-shadow-lg);
+}
+
 /* ============================================
    FORMS & INPUTS
    ============================================ */

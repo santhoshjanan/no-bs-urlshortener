@@ -129,7 +129,7 @@
             </div>
 
             <!-- Main Card -->
-            <div class="vb-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="vb-card-static" style="max-width: 900px; margin: 0 auto;">
                 <div class="vb-card-body">
                     <form action="{{ route('shorten') }}" method="POST">
                         @csrf
