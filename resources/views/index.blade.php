@@ -12,20 +12,62 @@
     </script>
     @endif
     <meta charset="UTF-8">
-    <meta property="og:title" content="No BS URL Shortener - Just does one job">
-    <meta property="og:description" content="Shorten your URLs quickly and efficiently - without giving away who are you. Try it now!">
-    <meta property="og:image" content="{{ asset('images/image.png') }}">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta name="twitter:card" content="Shorten your URLs quickly and efficiently - without giving away who are you. Just does one job and does it well.">
-    <meta name="twitter:title" content="No BS URL Shortener - Just does one job">
-    <meta name="twitter:description" content="Shorten your URLs quickly and efficiently - without giving away who are you. Try it now!">
-    <meta name="twitter:image" content="{{ asset('images/image.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>No BS URL Shortener - Just does one job</title>
-    <meta name="description" content="Shorten your URLs quickly and efficiently with our easy-to-use tool. Try it now!">
-    <meta name="keywords" content="URL shortener, link shortener, shorten URL, simplify links">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Primary Meta Tags -->
+    <title>No BS URL Shortener - Privacy-First Link Shortening</title>
+    <meta name="description" content="Privacy-first URL shortening service with no tracking. Anonymous, fast, and secure. Free API available.">
+    <meta name="keywords" content="URL shortener, link shortener, privacy, anonymous url shortener, free url shortener, url shortener api">
     <meta name="author" content="No BS URL Shortener">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="No BS URL Shortener - Privacy-First Link Shortening">
+    <meta property="og:description" content="Privacy-first URL shortening service with no tracking. Anonymous, fast, and secure. Free API available.">
+    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="No BS URL Shortener - Privacy-First Link Shortening">
+    <meta name="twitter:description" content="Privacy-first URL shortening service with no tracking. Anonymous, fast, and secure. Free API available.">
+    <meta name="twitter:image" content="{{ asset('images/og-image.jpg') }}">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "No BS URL Shortener",
+      "description": "Privacy-first URL shortening service - Just does one job, and does it well",
+      "url": "{{ url('/') }}",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Anonymous URL shortening",
+        "Privacy-first analytics",
+        "RESTful API",
+        "No personal data tracking",
+        "Redis caching for fast performance",
+        "Temporary URL support with expiration"
+      ],
+      "creator": {
+        "@type": "Person",
+        "name": "Santhosh J"
+      }
+    }
+    </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

@@ -1,2 +1,11 @@
 User-agent: *
 Disallow:
+
+# Allow all bots to crawl
+Allow: /
+
+# Crawl-delay (be nice to servers)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://url.thaliyal.com/sitemap.xml
