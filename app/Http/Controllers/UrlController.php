@@ -29,16 +29,21 @@ class UrlController extends Controller
                 'url',
                 'regex:/^https?:\/\//i'
             ],
+            'minutes' => 'nullable|integer|min:0|max:525960',
             'g-recaptcha-response' => 'required|captcha'
             ],
             [
                 'original_url.regex' => 'Only HTTP and HTTPS URLs are allowed.',
+                'minutes.integer' => 'Minutes must be a valid number.',
+                'minutes.min' => 'Minutes cannot be negative.',
+                'minutes.max' => 'Minutes cannot exceed 525960 (365 days).',
                 'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
                 'g-recaptcha-response.captcha' => 'Captcha error! Try again. If the problem persists, reach out to me using the contact icon in the footer.',
             ],
         );
 
-        return view('index', $this->createShortUrl($request->original_url));
+        $minutes = $request->input('minutes', 0);
+        return view('index', $this->createShortUrl($request->original_url, $minutes));
     }
 
     public function api_shortener(Request $request){
@@ -48,16 +53,20 @@ class UrlController extends Controller
                 'url',
                 'regex:/^https?:\/\//i'
             ],
+            'minutes' => 'nullable|integer|min:0|max:525960',
         ], [
             'original_url.regex' => 'Only HTTP and HTTPS URLs are allowed.',
+            'minutes.integer' => 'Minutes must be a valid number.',
+            'minutes.min' => 'Minutes cannot be negative.',
+            'minutes.max' => 'Minutes cannot exceed 525960 (365 days).',
         ]);
 
-        return response()->json($this->createShortUrl($request->original_url), 201);
+        $minutes = $request->input('minutes', 0);
+        return response()->json($this->createShortUrl($request->original_url, $minutes), 201);
     }
 
-    protected function createShortUrl(string $originalUrl): array
+    protected function createShortUrl(string $originalUrl, int $minutes = 0): array
     {
-
         // Retry up to 10 times to handle collisions
         $maxAttempts = 10;
         $url = null;
@@ -65,14 +74,29 @@ class UrlController extends Controller
         for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
             try {
                 $shortened = $this->generateRandomString(4, 6);
+                $cacheKey = "shortened_url:{$shortened}";
 
+                // If minutes > 0, this is a temporary URL - store only in Redis
+                if ($minutes > 0) {
+                    // Check if this shortened code already exists in Redis or DB
+                    if (Cache::has($cacheKey) || Url::where('shortened_url', $shortened)->exists()) {
+                        // Collision detected, retry
+                        continue;
+                    }
+
+                    // Store only in Redis with expiry
+                    Cache::put($cacheKey, $originalUrl, now()->addMinutes($minutes));
+
+                    return ['original_url' => $originalUrl, 'shortened_url' => url($shortened)];
+                }
+
+                // If minutes = 0, this is a permanent URL - normal flow (DB + cache)
                 $url = Url::create([
                     'original_url' => $originalUrl,
                     'shortened_url' => $shortened,
                 ]);
 
-                // Define cache key based on the shortened URL
-                $cacheKey = "shortened_url:{$shortened}";
+                // Cache for 14 days
                 Cache::put($cacheKey, $url->original_url, now()->addDays(14));
 
                 return ['original_url'=>$originalUrl, 'shortened_url' => url($shortened)];
@@ -95,13 +119,24 @@ class UrlController extends Controller
         // Define cache key based on the shortened URL
         $cacheKey = "shortened_url:{$shortened}";
 
-        // Attempt to retrieve the original URL from the cache
-        $originalUrl = Cache::remember($cacheKey, now()->addDays(14), function () use ($shortened) {
-            $url = Url::where('shortened_url', $shortened)->firstOrFail();
-            return $url->original_url;
-        });
+        // First, try to get from Redis cache (handles both temporary and permanent URLs)
+        $originalUrl = Cache::get($cacheKey);
 
-        // Collect privacy-friendly analytics (no personal data)
+        // If not in cache, try to get from database (permanent URLs only)
+        if (!$originalUrl) {
+            $url = Url::where('shortened_url', $shortened)->first();
+
+            if ($url) {
+                // Found in database - cache it and use it
+                $originalUrl = $url->original_url;
+                Cache::put($cacheKey, $originalUrl, now()->addDays(14));
+            } else {
+                // Not found in cache or database - URL doesn't exist or has expired
+                abort(404, 'Shortened URL not found or has expired');
+            }
+        }
+
+        // Collect privacy-friendly analytics only for permanent URLs (those in DB)
         $url = Url::where('shortened_url', $shortened)->first();
         if ($url) {
             $analytics = $url->analytics ?? [];

@@ -154,6 +154,24 @@
                             </div>
                         </div>
 
+                        <!-- Minutes Input -->
+                        <div class="vb-form-group">
+                            <label class="vb-label" for="minutes">Minutes:</label>
+                            <input
+                                type="number"
+                                name="minutes"
+                                id="minutes"
+                                class="vb-input"
+                                min="0"
+                                max="525960"
+                                value="0"
+                                style="max-width: 200px;"
+                            >
+                            <small style="display: block; margin-top: 0.5rem; color: var(--vb-black); opacity: 0.7;">
+                                Set 0 for permanent one. Set timer for a temporary url.
+                            </small>
+                        </div>
+
                         <!-- reCAPTCHA -->
                         <div class="vb-form-group">
                             {!! NoCaptcha::display() !!}
