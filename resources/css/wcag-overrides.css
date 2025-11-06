@@ -44,7 +44,7 @@
 
 /* Primary colored text should use darker variant */
 .text-primary {
-  color: var(--vb-primary-dark) !important;
+  color: var(--vb-text-on-primary) !important;
 }
 
 /* Success colored text should use darker variant */
