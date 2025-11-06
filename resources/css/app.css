@@ -1,3 +1,2 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Vibe Brutalism CSS */
+@import './vibe-brutalism.css';

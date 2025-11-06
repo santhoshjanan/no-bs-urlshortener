@@ -8,5 +8,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/shorten', [UrlController::class, 'api_shortener']);
+Route::post('/shorten', [UrlController::class, 'api_shortener'])
+    ->middleware('throttle:10,1');
 Route::get('/{shortened}', [UrlController::class, 'redirect']);

@@ -1,66 +1,273 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# No BS URL Shortener
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A straightforward, no-nonsense URL shortener built with Laravel. Just shorten your URLs - no account required, no tracking beyond basic analytics, no BS!
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Simple URL Shortening**: Enter a URL, get a shortened version
+- **Privacy-Focused**: No personal data collection, minimal analytics
+- **reCAPTCHA Protection**: Spam prevention on web interface
+- **API Support**: RESTful API for programmatic access
+- **Rate Limiting**: Built-in protection against abuse
+- **Caching**: Fast redirects with 14-day caching
+- **Analytics**: Basic, privacy-friendly click tracking
+- **Custom 404 Pages**: User-friendly error handling
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 11
+- **Database**: PostgreSQL
+- **Cache**: Redis/Database
+- **Queue**: Database-backed queue system
+- **Frontend**: Vibe Brutalism CSS Framework (Neo-Brutalist Design), Vanilla JavaScript
+- **Build Tool**: Vite
+- **Security**: reCAPTCHA, rate limiting, XSS protection
 
-## Learning Laravel
+## Design System
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+This project uses **Vibe Brutalism**, a neo-brutalist CSS framework featuring:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Bold Aesthetics**: Thick 3px borders, strong offset shadows, and high contrast
+- **Vibrant Colors**: Yellow (#FFD700), Pink (#FF6B9D), Cyan (#00F5FF), and more
+- **Typography**: Space Grotesk font with uppercase headings for impact
+- **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation support
+- **Interactive Components**: Buttons, cards, forms, toasts, modals, and more
+- **Responsive Design**: Mobile-first approach with brutalist aesthetics maintained across devices
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The brutalist design perfectly embodies the "No BS" philosophy with its raw, honest, and unapologetic visual style.
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prerequisites
 
-### Premium Partners
+- PHP 8.2 or higher
+- Composer
+- PostgreSQL
+- Redis (optional, but recommended)
+- Node.js & NPM
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd no-bs-urlshortener
+```
+
+2. Install PHP dependencies:
+```bash
+composer install
+```
+
+3. Install Node dependencies:
+```bash
+npm install
+```
+
+4. Copy the environment file:
+```bash
+cp .env.example .env
+```
+
+5. Generate application key:
+```bash
+php artisan key:generate
+```
+
+6. Configure your `.env` file:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=url_shortener_server
+DB_USERNAME=your_db_user
+DB_PASSWORD=your_db_password
+
+# Google reCAPTCHA (required for web form)
+NOCAPTCHA_SITEKEY=your_recaptcha_site_key
+NOCAPTCHA_SECRET=your_recaptcha_secret_key
+
+# Analytics (optional)
+GOOGLE_ANALYTICS_ID=your_ga_id
+MICROSOFT_CLARITY_ID=your_clarity_id
+
+# Cache (recommended)
+CACHE_STORE=redis
+```
+
+7. Run migrations:
+```bash
+php artisan migrate
+```
+
+8. Build frontend assets:
+```bash
+npm run build
+```
+
+9. Start the development server:
+```bash
+composer run dev
+```
+
+This will start:
+- Laravel development server (port 8000)
+- Queue worker
+- Log viewer
+- Vite dev server
+
+## Usage
+
+### Web Interface
+
+Visit `http://localhost:8000` and enter a URL to shorten.
+
+### API Endpoints
+
+#### Shorten a URL
+
+```bash
+POST /api/shorten
+Content-Type: application/json
+
+{
+  "original_url": "https://example.com/very/long/url"
+}
+```
+
+Response:
+```json
+{
+  "original_url": "https://example.com/very/long/url",
+  "shortened_url": "http://localhost:8000/abc123"
+}
+```
+
+#### Access Shortened URL
+
+```bash
+GET /{shortened_code}
+```
+
+Redirects to the original URL.
+
+### Rate Limiting
+
+- Web form: 10 requests per minute
+- API: 10 requests per minute
+
+## Security Features
+
+- ✅ Mass assignment protection with explicit `$fillable` fields
+- ✅ XSS protection - only HTTP/HTTPS protocols allowed
+- ✅ CSRF protection on web forms
+- ✅ reCAPTCHA spam prevention
+- ✅ Rate limiting on all endpoints
+- ✅ URL collision handling with retry logic
+- ✅ Input validation on all endpoints
+- ✅ Privacy-friendly analytics (no personal data)
+
+## Testing
+
+Run the test suite:
+```bash
+php artisan test
+```
+
+Or with coverage:
+```bash
+php artisan test --coverage
+```
+
+## Database Schema
+
+### `urls` Table
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | bigint | Primary key |
+| original_url | string | The original long URL |
+| shortened_url | string (unique) | The shortened code |
+| clicks | integer | Number of times accessed |
+| analytics | json | Privacy-friendly click data |
+| created_at | timestamp | Creation timestamp |
+| updated_at | timestamp | Last update timestamp |
+
+## Configuration
+
+### Environment Variables
+
+- `NOCAPTCHA_SITEKEY` - Google reCAPTCHA site key
+- `NOCAPTCHA_SECRET` - Google reCAPTCHA secret key
+- `GOOGLE_ANALYTICS_ID` - Google Analytics tracking ID (optional)
+- `MICROSOFT_CLARITY_ID` - Microsoft Clarity tracking ID (optional)
+- `CACHE_STORE` - Cache driver (redis, database, etc.)
+- `DB_*` - Database configuration
+
+### Caching Strategy
+
+- Shortened URL lookups are cached for 14 days
+- Cache key format: `shortened_url:{code}`
+- Reduces database load for frequently accessed URLs
+
+### Analytics Privacy
+
+The application tracks minimal, privacy-friendly analytics:
+- Click timestamp
+- Referrer domain (not full URL)
+- No IP addresses
+- No user agents
+- Last 100 clicks per URL (prevents unbounded growth)
+
+## Deployment
+
+### Production Checklist
+
+1. Set `APP_ENV=production` in `.env`
+2. Set `APP_DEBUG=false` in `.env`
+3. Configure production database
+4. Set up Redis for caching
+5. Configure queue workers
+6. Set up SSL certificate
+7. Add reCAPTCHA keys
+8. Optimize application:
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan optimize
+```
+
+### Queue Worker
+
+In production, run the queue worker as a supervised process:
+```bash
+php artisan queue:work --tries=3 --timeout=90
+```
+
+Consider using Laravel Horizon for advanced queue management.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome! Please follow these steps:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new features
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Support
+
+For bugs, feature requests, or questions:
+- Email: viscous.buys4y@icloud.com
+- Twitter: [@santhoshj](https://x.com/santhoshj)
+
+## Acknowledgments
+
+Built with ❤️ and Laravel in New Jersey!
