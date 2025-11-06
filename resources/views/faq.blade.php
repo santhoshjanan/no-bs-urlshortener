@@ -51,36 +51,6 @@
                 </div>
             </div>
 
-            <!-- FAQ 4 -->
-            <div class="vb-card-static" style="margin-bottom: 1.5rem;">
-                <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Is there an API I can use?</h2>
-                    <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1rem;">
-                        Yes! You can programmatically shorten URLs using our REST API. Send a POST request to <code style="background: var(--vb-primary); padding: 0.25rem 0.5rem; font-weight: 700;">/api/shorten</code>
-                        with your URL in JSON format.
-                    </p>
-                    <div style="background: var(--vb-black); color: var(--vb-white); padding: 1rem; border: var(--vb-border); font-family: monospace; overflow-x: auto;">
-POST /api/shorten<br>
-Content-Type: application/json<br>
-<br>
-{<br>
-&nbsp;&nbsp;"original_url": "https://example.com/long/url"<br>
-}
-                    </div>
-                </div>
-            </div>
-
-            <!-- FAQ 5 -->
-            <div class="vb-card-static" style="margin-bottom: 1.5rem;">
-                <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Are there any rate limits?</h2>
-                    <p style="font-size: 1.125rem; line-height: 1.7;">
-                        Yes, to prevent abuse, we limit requests to 10 per minute per IP address. This applies to both the web
-                        interface and the API. If you need higher limits, feel free to reach out.
-                    </p>
-                </div>
-            </div>
-
             <!-- FAQ 6 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
@@ -94,16 +64,6 @@ Content-Type: application/json<br>
                 </div>
             </div>
 
-            <!-- FAQ 7 -->
-            <div class="vb-card-static" style="margin-bottom: 1.5rem;">
-                <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Can I see statistics for my shortened URLs?</h2>
-                    <p style="font-size: 1.125rem; line-height: 1.7;">
-                        Currently, no. Since we don't require accounts, there's no way to associate shortened URLs with specific
-                        users. We track basic click counts for the service, but these aren't publicly accessible.
-                    </p>
-                </div>
-            </div>
 
             <!-- FAQ 8 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
