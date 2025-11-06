@@ -33,23 +33,23 @@
                 <h2 class="vb-h2">What Makes Us Different</h2>
                 <div style="background: var(--vb-primary); border: var(--vb-border); box-shadow: var(--vb-shadow-md); padding: 2rem; margin-bottom: 2rem;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> Privacy-First: No personal data collection
+                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> Privacy-First: No personal data collection
                         </li>
-                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> No Account Required: Just use it
+                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> No Account Required: Just use it
                         </li>
-                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> Open Source: Check the code yourself
+                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> Open Source: Check the code yourself
                         </li>
-                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> Fast: Redis caching for lightning speed
+                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> Fast: Redis caching for lightning speed
                         </li>
-                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> Temporary URLs: Set expiration times
+                        <li style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> Temporary URLs: Set expiration times
                         </li>
-                        <li style="font-size: 1.125rem; font-weight: 600;">
-                            <span style="color: var(--vb-success); font-size: 1.5rem;">✓</span> Free API: Integrate with your apps
+                        <li style="font-size: 1.125rem; font-weight: 700; color: var(--vb-black);">
+                            <span style="color: var(--vb-black); font-size: 1.5rem; font-weight: 900;">✓</span> Free API: Integrate with your apps
                         </li>
                     </ul>
                 </div>
@@ -84,8 +84,8 @@
                 </p>
 
                 <div style="background: var(--vb-accent); border: var(--vb-border); box-shadow: var(--vb-shadow-lg); padding: 2rem; text-align: center; margin-top: 3rem;">
-                    <h3 class="vb-h3" style="margin-bottom: 1rem;">Ready to shorten some URLs?</h3>
-                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg">Get Started Now</a>
+                    <h3 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">Ready to shorten some URLs?</h3>
+                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg" style="color: var(--vb-black) !important;">Get Started Now</a>
                 </div>
             </div>
         </div>

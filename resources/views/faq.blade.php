@@ -20,7 +20,7 @@
             <!-- FAQ 1 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">How do I shorten a URL?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">How do I shorten a URL?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         It's dead simple. Just paste your long URL into the input field on the homepage, complete the reCAPTCHA,
                         and click "SHORTEN!". You'll get a shortened URL instantly. No account needed.
@@ -31,7 +31,7 @@
             <!-- FAQ 2 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Do I need to create an account?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Do I need to create an account?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Nope! That's the whole point. No account, no login, no tracking. Just shorten your URL and go.
                         However, this means you won't be able to edit or delete your shortened URLs after creation.
@@ -42,7 +42,7 @@
             <!-- FAQ 3 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">What about temporary URLs?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">What about temporary URLs?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         You can set an expiration time in minutes when creating a shortened URL. Set it to 0 for a permanent link,
                         or specify any number of minutes (up to 1 year) for a temporary link. After the time expires, the link
@@ -54,7 +54,7 @@
             <!-- FAQ 4 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Is there an API I can use?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Is there an API I can use?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1rem;">
                         Yes! You can programmatically shorten URLs using our REST API. Send a POST request to <code style="background: var(--vb-primary); padding: 0.25rem 0.5rem; font-weight: 700;">/api/shorten</code>
                         with your URL in JSON format.
@@ -73,7 +73,7 @@ Content-Type: application/json<br>
             <!-- FAQ 5 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Are there any rate limits?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Are there any rate limits?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Yes, to prevent abuse, we limit requests to 10 per minute per IP address. This applies to both the web
                         interface and the API. If you need higher limits, feel free to reach out.
@@ -84,7 +84,7 @@ Content-Type: application/json<br>
             <!-- FAQ 6 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">What data do you collect?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">What data do you collect?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         We collect minimal, privacy-friendly analytics: click timestamps and referrer domains (not full URLs).
                         We do NOT collect IP addresses, user agents, or any personal identification data. We also use Google
@@ -97,7 +97,7 @@ Content-Type: application/json<br>
             <!-- FAQ 7 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Can I see statistics for my shortened URLs?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Can I see statistics for my shortened URLs?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Currently, no. Since we don't require accounts, there's no way to associate shortened URLs with specific
                         users. We track basic click counts for the service, but these aren't publicly accessible.
@@ -108,7 +108,7 @@ Content-Type: application/json<br>
             <!-- FAQ 8 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Can I customize my shortened URL?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Can I customize my shortened URL?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Not at the moment. Shortened URLs are randomly generated to ensure uniqueness and prevent collisions.
                         This keeps the service simple and fast.
@@ -119,7 +119,7 @@ Content-Type: application/json<br>
             <!-- FAQ 9 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">How long do shortened URLs last?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">How long do shortened URLs last?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Permanent URLs (set to 0 minutes) last indefinitely. Temporary URLs expire after the time you specify.
                         We don't automatically delete old URLs, so your permanent links should work forever (or until the service
@@ -131,7 +131,7 @@ Content-Type: application/json<br>
             <!-- FAQ 10 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">What if someone shortens a malicious link?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">What if someone shortens a malicious link?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         We have spam prevention via reCAPTCHA and rate limiting. We only allow HTTP/HTTPS URLs for security.
                         However, we can't verify the content of destination sites. Use shortened URLs from untrusted sources
@@ -143,7 +143,7 @@ Content-Type: application/json<br>
             <!-- FAQ 11 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Is this service free?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Is this service free?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Yes! Completely free. No hidden fees, no premium tiers, no ads. I built this for myself and decided
                         to share it with the world. If you find it useful and want to support the project, star it on GitHub
@@ -155,7 +155,7 @@ Content-Type: application/json<br>
             <!-- FAQ 12 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">Is the code open source?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">Is the code open source?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Yes! Check out the source code on
                         <a href="https://github.com/santhoshjanan/no-bs-urlshortener" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; font-weight: 700;">GitHub</a>.
@@ -167,7 +167,7 @@ Content-Type: application/json<br>
             <!-- FAQ 13 -->
             <div class="vb-card-static" style="margin-bottom: 1.5rem;">
                 <div class="vb-card-body">
-                    <h2 class="vb-h3" style="color: var(--vb-primary);">I have a feature request. How can I suggest it?</h2>
+                    <h2 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">I have a feature request. How can I suggest it?</h2>
                     <p style="font-size: 1.125rem; line-height: 1.7;">
                         Awesome! Reach out via
                         <a href="mailto:viscous.buys4y@icloud.com" style="text-decoration: underline; font-weight: 700;">email</a> or
@@ -179,11 +179,11 @@ Content-Type: application/json<br>
 
             <!-- CTA -->
             <div style="background: var(--vb-success); border: var(--vb-border); box-shadow: var(--vb-shadow-lg); padding: 2rem; text-align: center; margin-top: 3rem;">
-                <h3 class="vb-h3" style="margin-bottom: 1rem;">Still have questions?</h3>
-                <p style="font-size: 1.125rem; margin-bottom: 1.5rem;">
+                <h3 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">Still have questions?</h3>
+                <p style="font-size: 1.125rem; margin-bottom: 1.5rem; color: var(--vb-black);">
                     Feel free to reach out - I'm always happy to help!
                 </p>
-                <a href="mailto:viscous.buys4y@icloud.com" class="vb-btn vb-btn-primary vb-btn-lg">Contact Me</a>
+                <a href="mailto:viscous.buys4y@icloud.com" class="vb-btn vb-btn-primary vb-btn-lg" style="color: var(--vb-black) !important;">Contact Me</a>
             </div>
         </div>
     </div>

@@ -19,8 +19,8 @@
         <div class="vb-card-static" style="max-width: 900px; margin: 0 auto 2rem;">
             <div class="vb-card-body">
                 <div style="background: var(--vb-success); border: var(--vb-border); box-shadow: var(--vb-shadow-md); padding: 2rem; margin-bottom: 2rem;">
-                    <h2 class="vb-h3" style="margin-bottom: 1rem;">TL;DR - The No BS Summary</h2>
-                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600;">
+                    <h2 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">TL;DR - The No BS Summary</h2>
+                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; color: var(--vb-black);">
                         We collect almost nothing. Basic page analytics, click timestamps, and referrer domains. No IP addresses,
                         no user agents, no personal data. We use Google Analytics and Microsoft Clarity for site statistics,
                         but your URLs and personal info stay private.
@@ -35,7 +35,7 @@
                 </p>
 
                 <h2 class="vb-h2">2. Information We Collect</h2>
-                <h3 class="vb-h3" style="color: var(--vb-primary); margin-top: 1.5rem;">2.1 URLs You Shorten</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900; margin-top: 1.5rem;">2.1 URLs You Shorten</h3>
                 <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1.5rem;">
                     When you shorten a URL, we store:
                 </p>
@@ -46,7 +46,7 @@
                     <li>Expiration time (if you set one)</li>
                 </ul>
 
-                <h3 class="vb-h3" style="color: var(--vb-primary);">2.2 Usage Analytics</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">2.2 Usage Analytics</h3>
                 <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1.5rem;">
                     For shortened URLs, we track minimal analytics:
                 </p>
@@ -57,12 +57,12 @@
                     <li><strong>Last 100 clicks only:</strong> We only keep the most recent 100 clicks per URL to prevent unbounded data growth</li>
                 </ul>
 
-                <h3 class="vb-h3" style="color: var(--vb-primary);">2.3 What We DON'T Collect</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">2.3 What We DON'T Collect</h3>
                 <div style="background: var(--vb-danger); border: var(--vb-border); box-shadow: var(--vb-shadow-md); padding: 2rem; margin-bottom: 2rem;">
-                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; margin-bottom: 1rem;">
+                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; margin-bottom: 1rem; color: var(--vb-white);">
                         We explicitly DO NOT collect:
                     </p>
-                    <ul style="font-size: 1.125rem; line-height: 1.7; padding-left: 2rem;">
+                    <ul style="font-size: 1.125rem; line-height: 1.7; padding-left: 2rem; color: var(--vb-white);">
                         <li>IP addresses</li>
                         <li>User agents or browser information</li>
                         <li>Cookies (except those from Google Analytics and Microsoft Clarity)</li>
@@ -73,7 +73,7 @@
                     </ul>
                 </div>
 
-                <h3 class="vb-h3" style="color: var(--vb-primary);">2.4 Third-Party Analytics</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">2.4 Third-Party Analytics</h3>
                 <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1.5rem;">
                     We use Google Analytics and Microsoft Clarity to understand how our website is used. These services may collect:
                 </p>
@@ -173,11 +173,11 @@
                 </ul>
 
                 <div style="background: var(--vb-primary); border: var(--vb-border); box-shadow: var(--vb-shadow-lg); padding: 2rem; text-align: center; margin-top: 3rem;">
-                    <h3 class="vb-h3" style="margin-bottom: 1rem;">Privacy-focused and proud of it!</h3>
-                    <p style="font-size: 1.125rem; margin-bottom: 1.5rem;">
+                    <h3 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">Privacy-focused and proud of it!</h3>
+                    <p style="font-size: 1.125rem; margin-bottom: 1.5rem; color: var(--vb-black);">
                         Ready to shorten some URLs with confidence?
                     </p>
-                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg">Start Shortening</a>
+                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg" style="color: var(--vb-black) !important;">Start Shortening</a>
                 </div>
             </div>
         </div>

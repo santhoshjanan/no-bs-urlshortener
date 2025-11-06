@@ -19,8 +19,8 @@
         <div class="vb-card-static" style="max-width: 900px; margin: 0 auto 2rem;">
             <div class="vb-card-body">
                 <div style="background: var(--vb-accent); border: var(--vb-border); box-shadow: var(--vb-shadow-md); padding: 2rem; margin-bottom: 2rem;">
-                    <h2 class="vb-h3" style="margin-bottom: 1rem;">TL;DR - The No BS Summary</h2>
-                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600;">
+                    <h2 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">TL;DR - The No BS Summary</h2>
+                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; color: var(--vb-black);">
                         Use the service fairly. Don't abuse it. Don't shorten malicious links. We're not responsible if things
                         go wrong. The service is provided as-is. If you break these rules, we'll ban your access. Pretty simple!
                     </p>
@@ -45,7 +45,7 @@
                 </ul>
 
                 <h2 class="vb-h2">3. Acceptable Use</h2>
-                <h3 class="vb-h3" style="color: var(--vb-primary); margin-top: 1.5rem;">3.1 Permitted Use</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900; margin-top: 1.5rem;">3.1 Permitted Use</h3>
                 <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: 1.5rem;">
                     You may use the Service for lawful purposes only, including:
                 </p>
@@ -56,12 +56,12 @@
                     <li>Creating temporary or permanent shortened links</li>
                 </ul>
 
-                <h3 class="vb-h3" style="color: var(--vb-danger);">3.2 Prohibited Use</h3>
+                <h3 class="vb-h3" style="color: var(--vb-black); font-weight: 900;">3.2 Prohibited Use</h3>
                 <div style="background: var(--vb-danger); border: var(--vb-border); box-shadow: var(--vb-shadow-md); padding: 2rem; margin-bottom: 2rem;">
-                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; margin-bottom: 1rem;">
+                    <p style="font-size: 1.125rem; line-height: 1.7; font-weight: 600; margin-bottom: 1rem; color: var(--vb-white);">
                         You may NOT use the Service to:
                     </p>
-                    <ul style="font-size: 1.125rem; line-height: 1.7; padding-left: 2rem;">
+                    <ul style="font-size: 1.125rem; line-height: 1.7; padding-left: 2rem; color: var(--vb-white);">
                         <li>Shorten URLs that link to illegal content</li>
                         <li>Distribute malware, viruses, or malicious code</li>
                         <li>Phishing or scamming users</li>
@@ -201,11 +201,11 @@
                 </ul>
 
                 <div style="background: var(--vb-primary); border: var(--vb-border); box-shadow: var(--vb-shadow-lg); padding: 2rem; text-align: center; margin-top: 3rem;">
-                    <h3 class="vb-h3" style="margin-bottom: 1rem;">Agreed to the Terms?</h3>
-                    <p style="font-size: 1.125rem; margin-bottom: 1.5rem;">
+                    <h3 class="vb-h3" style="margin-bottom: 1rem; color: var(--vb-black);">Agreed to the Terms?</h3>
+                    <p style="font-size: 1.125rem; margin-bottom: 1.5rem; color: var(--vb-black);">
                         Time to shorten some URLs!
                     </p>
-                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg">Start Now</a>
+                    <a href="{{ route('index') }}" class="vb-btn vb-btn-primary vb-btn-lg" style="color: var(--vb-black) !important;">Start Now</a>
                 </div>
             </div>
         </div>

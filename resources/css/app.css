@@ -1,2 +1,5 @@
 /* Import Vibe Brutalism CSS */
 @import './vibe-brutalism.css';
+
+/* WCAG 2.1 AA Compliance Overrides */
+@import './wcag-overrides.css';
