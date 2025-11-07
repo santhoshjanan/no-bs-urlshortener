@@ -1,5 +1,12 @@
 # No BS URL Shortener
 
+[![CI](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/ci.yml/badge.svg)](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/ci.yml)
+[![SAST Security Scanning](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/sast.yml/badge.svg)](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/sast.yml)
+[![DAST Security Scanning](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/dast.yml/badge.svg)](https://github.com/santhoshjanan/no-bs-urlshortener/actions/workflows/dast.yml)
+[![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-777BB4.svg?logo=php&logoColor=white)](https://www.php.net/)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20.svg?logo=laravel&logoColor=white)](https://laravel.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 A straightforward, no-nonsense URL shortener built with Laravel. Just shorten your URLs - no account required, no tracking beyond basic analytics, no BS!
 
 ## Features
