@@ -108,15 +108,32 @@ jobs:
         with:
           target: 'http://localhost:8000'
           rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
+          cmd_options: '-a -J'
           fail_action: false
         continue-on-error: true
 
+      - name: Check for ZAP SARIF output
+        if: always()
+        id: zap-sarif
+        run: |
+          # Check for various possible SARIF output files from ZAP
+          if [ -f zap_scan.json ]; then
+            echo "sarif_file=zap_scan.json" >> $GITHUB_OUTPUT
+            echo "sarif_exists=true" >> $GITHUB_OUTPUT
+          elif [ -f report_json.json ]; then
+            # ZAP might output JSON but not SARIF - skip upload if not SARIF format
+            echo "sarif_exists=false" >> $GITHUB_OUTPUT
+            echo "Note: ZAP generated JSON report but not SARIF format"
+          else
+            echo "sarif_exists=false" >> $GITHUB_OUTPUT
+            echo "Note: No ZAP SARIF file found"
+          fi
+
       - name: Upload ZAP results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: always() && steps.zap-sarif.outputs.sarif_exists == 'true'
         with:
-          sarif_file: 'zap_scan.json'
+          sarif_file: '${{ steps.zap-sarif.outputs.sarif_file }}'
         continue-on-error: true
 
       - name: ZAP Scan Results
@@ -229,10 +246,27 @@ jobs:
           fail_action: false
         continue-on-error: true
 
+      - name: Check for ZAP SARIF output
+        if: always()
+        id: zap-sarif
+        run: |
+          # Check for various possible SARIF output files from ZAP
+          if [ -f zap_scan.json ]; then
+            echo "sarif_file=zap_scan.json" >> $GITHUB_OUTPUT
+            echo "sarif_exists=true" >> $GITHUB_OUTPUT
+          elif [ -f report_json.json ]; then
+            # ZAP might output JSON but not SARIF - skip upload if not SARIF format
+            echo "sarif_exists=false" >> $GITHUB_OUTPUT
+            echo "Note: ZAP generated JSON report but not SARIF format"
+          else
+            echo "sarif_exists=false" >> $GITHUB_OUTPUT
+            echo "Note: No ZAP SARIF file found"
+          fi
+
       - name: Upload ZAP results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: always() && steps.zap-sarif.outputs.sarif_exists == 'true'
         with:
-          sarif_file: 'zap_scan.json'
+          sarif_file: '${{ steps.zap-sarif.outputs.sarif_file }}'
         continue-on-error: true
 
