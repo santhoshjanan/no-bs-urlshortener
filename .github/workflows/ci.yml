@@ -80,6 +80,9 @@ jobs:
           DB_PASSWORD: postgres
         run: php artisan migrate --force
 
+      - name: Clear View Cache
+        run: php artisan view:clear
+
       - name: Run PHPUnit Tests
         env:
           DB_CONNECTION: pgsql

@@ -44,15 +44,15 @@
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@@context": "https://schema.org",
+      "@@type": "WebApplication",
       "name": "No BS URL Shortener",
       "description": "Privacy-first URL shortening service - Just does one job, and does it well",
       "url": "{{ url('/') }}",
       "applicationCategory": "UtilityApplication",
       "operatingSystem": "Web",
       "offers": {
-        "@type": "Offer",
+        "@@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
@@ -65,7 +65,7 @@
         "Temporary URL support with expiration"
       ],
       "creator": {
-        "@type": "Person",
+        "@@type": "Person",
         "name": "Santhosh J"
       }
     }
