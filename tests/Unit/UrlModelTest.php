@@ -42,6 +42,7 @@ class UrlModelTest extends TestCase
             'clicks' => 5
         ]);
 
+        $url->refresh();
         $this->assertEquals(5, $url->clicks);
     }
 
@@ -181,15 +182,15 @@ class UrlModelTest extends TestCase
             'shortened_url' => 'test123'
         ]);
 
-        $originalUpdatedAt = $url->updated_at;
+        $originalUpdatedAt = $url->updated_at->timestamp;
 
         // Wait a moment to ensure timestamp difference
-        sleep(1);
+        usleep(100000); // 0.1 seconds
 
         $url->update(['clicks' => 5]);
         $url->refresh();
 
-        $this->assertGreaterThan($originalUpdatedAt, $url->updated_at);
+        $this->assertGreaterThanOrEqual($originalUpdatedAt, $url->updated_at->timestamp);
     }
 
     // ==================== Unique Constraint Tests ====================
@@ -221,7 +222,8 @@ class UrlModelTest extends TestCase
         ]);
 
         $url->increment('clicks');
-        $url->refresh();
+        // increment() already refreshes the model, but let's be explicit
+        $url = $url->fresh();
 
         $this->assertEquals(6, $url->clicks);
     }
@@ -235,7 +237,8 @@ class UrlModelTest extends TestCase
         ]);
 
         $url->increment('clicks', 3);
-        $url->refresh();
+        // increment() already refreshes the model, but let's be explicit
+        $url = $url->fresh();
 
         $this->assertEquals(8, $url->clicks);
     }

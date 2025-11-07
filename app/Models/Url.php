@@ -14,6 +14,7 @@ class Url extends Model
         'original_url',
         'shortened_url',
         'analytics',
+        'clicks',
     ];
 
     protected $casts = [

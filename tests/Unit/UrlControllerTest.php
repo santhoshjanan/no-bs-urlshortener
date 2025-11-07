@@ -66,10 +66,16 @@ class UrlControllerTest extends TestCase
     }
 
     // ==================== createShortUrl Tests ====================
+    // Note: createShortUrl is protected, so we test it through public methods or use reflection
 
     public function test_create_short_url_creates_permanent_url(): void
     {
-        $result = $this->controller->createShortUrl('https://example.com', 0);
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->controller, 'https://example.com', 0);
         
         $this->assertIsArray($result);
         $this->assertArrayHasKey('original_url', $result);
@@ -86,7 +92,12 @@ class UrlControllerTest extends TestCase
 
     public function test_create_short_url_creates_temporary_url(): void
     {
-        $result = $this->controller->createShortUrl('https://example.com', 60);
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->controller, 'https://example.com', 60);
         
         $this->assertIsArray($result);
         $this->assertEquals('https://example.com', $result['original_url']);
@@ -103,7 +114,12 @@ class UrlControllerTest extends TestCase
 
     public function test_create_short_url_caches_permanent_url(): void
     {
-        $result = $this->controller->createShortUrl('https://example.com', 0);
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
+        $result = $method->invoke($this->controller, 'https://example.com', 0);
         
         $code = basename(parse_url($result['shortened_url'], PHP_URL_PATH));
         
@@ -121,8 +137,13 @@ class UrlControllerTest extends TestCase
             'shortened_url' => $existingCode
         ]);
         
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
         // Try to create another URL - should handle collision
-        $result = $this->controller->createShortUrl('https://new.com', 0);
+        $result = $method->invoke($this->controller, 'https://new.com', 0);
         
         $newCode = basename(parse_url($result['shortened_url'], PHP_URL_PATH));
         
@@ -139,8 +160,13 @@ class UrlControllerTest extends TestCase
         $existingCode = 'temp123';
         Cache::put("shortened_url:{$existingCode}", 'https://existing.com', now()->addMinutes(60));
         
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
         // Try to create temporary URL - should handle collision
-        $result = $this->controller->createShortUrl('https://new.com', 60);
+        $result = $method->invoke($this->controller, 'https://new.com', 60);
         
         $newCode = basename(parse_url($result['shortened_url'], PHP_URL_PATH));
         
@@ -152,8 +178,13 @@ class UrlControllerTest extends TestCase
 
     public function test_create_short_url_returns_different_codes_for_different_urls(): void
     {
-        $result1 = $this->controller->createShortUrl('https://example1.com', 0);
-        $result2 = $this->controller->createShortUrl('https://example2.com', 0);
+        // Use reflection to call protected method
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('createShortUrl');
+        $method->setAccessible(true);
+        
+        $result1 = $method->invoke($this->controller, 'https://example1.com', 0);
+        $result2 = $method->invoke($this->controller, 'https://example2.com', 0);
         
         $code1 = basename(parse_url($result1['shortened_url'], PHP_URL_PATH));
         $code2 = basename(parse_url($result2['shortened_url'], PHP_URL_PATH));
