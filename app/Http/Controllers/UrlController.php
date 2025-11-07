@@ -10,10 +10,11 @@ use InvalidArgumentException;
 
 class UrlController extends Controller
 {
-
-    function generateRandomString(int $minLength, int $maxLength): string
+    public function generateRandomString(int $minLength, int $maxLength): string
     {
-        if ($minLength > $maxLength) throw new InvalidArgumentException("Minimum length cannot be greater than maximum length.");
+        if ($minLength > $maxLength) {
+            throw new InvalidArgumentException('Minimum length cannot be greater than maximum length.');
+        }
 
         // Generate a random length between the given range
         $length = rand($minLength, $maxLength);
@@ -21,17 +22,18 @@ class UrlController extends Controller
         // Generate and return the random string
         return Str::random($length);
     }
+
     public function web_shortener(Request $request)
     {
         $request->validate([
             'original_url' => [
                 'required',
                 'url',
-                'regex:/^https?:\/\//i'
+                'regex:/^https?:\/\//i',
             ],
             'minutes' => 'nullable|integer|min:0|max:525960',
-            'g-recaptcha-response' => 'required|captcha'
-            ],
+            'g-recaptcha-response' => 'required|captcha',
+        ],
             [
                 'original_url.regex' => 'Only HTTP and HTTPS URLs are allowed.',
                 'minutes.integer' => 'Minutes must be a valid number.',
@@ -43,15 +45,17 @@ class UrlController extends Controller
         );
 
         $minutes = $request->input('minutes', 0);
+
         return view('index', $this->createShortUrl($request->original_url, $minutes));
     }
 
-    public function api_shortener(Request $request){
+    public function api_shortener(Request $request)
+    {
         $request->validate([
             'original_url' => [
                 'required',
                 'url',
-                'regex:/^https?:\/\//i'
+                'regex:/^https?:\/\//i',
             ],
             'minutes' => 'nullable|integer|min:0|max:525960',
         ], [
@@ -62,6 +66,7 @@ class UrlController extends Controller
         ]);
 
         $minutes = $request->input('minutes', 0);
+
         return response()->json($this->createShortUrl($request->original_url, $minutes), 201);
     }
 
@@ -99,7 +104,7 @@ class UrlController extends Controller
                 // Cache for 14 days
                 Cache::put($cacheKey, $url->original_url, now()->addDays(14));
 
-                return ['original_url'=>$originalUrl, 'shortened_url' => url($shortened)];
+                return ['original_url' => $originalUrl, 'shortened_url' => url($shortened)];
             } catch (\Illuminate\Database\QueryException $e) {
                 // If it's a unique constraint violation, retry with a new code
                 if ($e->getCode() === '23505' || str_contains($e->getMessage(), 'unique')) {
@@ -111,7 +116,7 @@ class UrlController extends Controller
         }
 
         // If we exhausted all attempts, throw an error
-        throw new \RuntimeException('Unable to generate a unique shortened URL after ' . $maxAttempts . ' attempts.');
+        throw new \RuntimeException('Unable to generate a unique shortened URL after '.$maxAttempts.' attempts.');
     }
 
     public function redirect(Request $request, $shortened)
@@ -123,7 +128,7 @@ class UrlController extends Controller
         $originalUrl = Cache::get($cacheKey);
 
         // If not in cache, try to get from database (permanent URLs only)
-        if (!$originalUrl) {
+        if (! $originalUrl) {
             $url = Url::where('shortened_url', $shortened)->first();
 
             if ($url) {

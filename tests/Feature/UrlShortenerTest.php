@@ -57,38 +57,38 @@ class UrlShortenerTest extends TestCase
     public function test_api_shortener_creates_shortened_url(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         $response->assertStatus(201);
         $response->assertJsonStructure([
             'original_url',
-            'shortened_url'
+            'shortened_url',
         ]);
 
         $this->assertDatabaseHas('urls', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
     }
 
     public function test_api_shortener_creates_permanent_url_by_default(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         $response->assertStatus(201);
         $data = $response->json();
-        
+
         // Extract shortened code from full URL
         $shortenedCode = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
-        
+
         // Should be in database
         $this->assertDatabaseHas('urls', [
             'original_url' => 'https://example.com',
-            'shortened_url' => $shortenedCode
+            'shortened_url' => $shortenedCode,
         ]);
-        
+
         // Should be cached
         $this->assertNotNull(Cache::get("shortened_url:{$shortenedCode}"));
     }
@@ -104,7 +104,7 @@ class UrlShortenerTest extends TestCase
     public function test_api_shortener_validates_url_format(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'not-a-valid-url'
+            'original_url' => 'not-a-valid-url',
         ]);
 
         $response->assertStatus(422);
@@ -114,7 +114,7 @@ class UrlShortenerTest extends TestCase
     public function test_api_shortener_blocks_non_http_protocols(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'javascript:alert(1)'
+            'original_url' => 'javascript:alert(1)',
         ]);
 
         $response->assertStatus(422);
@@ -124,24 +124,24 @@ class UrlShortenerTest extends TestCase
     public function test_api_shortener_accepts_http_urls(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'http://example.com'
+            'original_url' => 'http://example.com',
         ]);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('urls', [
-            'original_url' => 'http://example.com'
+            'original_url' => 'http://example.com',
         ]);
     }
 
     public function test_api_shortener_accepts_https_urls(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('urls', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
     }
 
@@ -149,7 +149,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 'not-a-number'
+            'minutes' => 'not-a-number',
         ]);
 
         $response->assertStatus(422);
@@ -160,7 +160,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => -1
+            'minutes' => -1,
         ]);
 
         $response->assertStatus(422);
@@ -171,7 +171,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 525961
+            'minutes' => 525961,
         ]);
 
         $response->assertStatus(422);
@@ -182,7 +182,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 60
+            'minutes' => 60,
         ]);
 
         $response->assertStatus(201);
@@ -192,7 +192,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 525960
+            'minutes' => 525960,
         ]);
 
         $response->assertStatus(201);
@@ -202,20 +202,20 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 60
+            'minutes' => 60,
         ]);
 
         $response->assertStatus(201);
         $data = $response->json();
-        
+
         // Extract shortened code
         $shortenedCode = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
-        
+
         // Should NOT be in database (temporary URLs are cache-only)
         $this->assertDatabaseMissing('urls', [
-            'shortened_url' => $shortenedCode
+            'shortened_url' => $shortenedCode,
         ]);
-        
+
         // Should be in cache
         $this->assertNotNull(Cache::get("shortened_url:{$shortenedCode}"));
     }
@@ -225,7 +225,7 @@ class UrlShortenerTest extends TestCase
     public function test_web_shortener_requires_captcha(): void
     {
         $response = $this->from('/')->post('/', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         // Laravel redirects back with errors on validation failure for web routes
@@ -238,7 +238,7 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->from('/')->post('/', [
             'original_url' => 'not-a-url',
-            'g-recaptcha-response' => 'valid-captcha'
+            'g-recaptcha-response' => 'valid-captcha',
         ]);
 
         // Laravel redirects back with errors on validation failure for web routes
@@ -252,14 +252,14 @@ class UrlShortenerTest extends TestCase
         // For testing, we'll use a workaround: test the API endpoint instead
         // which doesn't require captcha, or configure test captcha keys
         // The web form captcha requirement is tested in the validation test above
-        
+
         // This test verifies that when all validation passes, a URL is created
         // In a real scenario, you'd configure NOCAPTCHA_SECRET with a test key
         // that always returns true for 'test-captcha-response'
-        
+
         // For now, we'll skip this test or test through API which doesn't need captcha
         $this->markTestSkipped('Requires test reCAPTCHA keys to properly test web form submission');
-        
+
         // Alternative: Test that the endpoint structure is correct
         // The actual captcha validation is tested in test_web_shortener_requires_captcha
     }
@@ -270,7 +270,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $response = $this->get('/test123');
@@ -303,14 +303,14 @@ class UrlShortenerTest extends TestCase
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'test456',
-            'clicks' => 0
+            'clicks' => 0,
         ]);
 
         $this->get('/test456');
 
         $this->assertDatabaseHas('urls', [
             'shortened_url' => 'test456',
-            'clicks' => 1
+            'clicks' => 1,
         ]);
     }
 
@@ -323,7 +323,7 @@ class UrlShortenerTest extends TestCase
 
         // Should not exist in database
         $this->assertDatabaseMissing('urls', [
-            'shortened_url' => $shortenedCode
+            'shortened_url' => $shortenedCode,
         ]);
     }
 
@@ -338,7 +338,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'cached123'
+            'shortened_url' => 'cached123',
         ]);
 
         // First request - should cache
@@ -356,10 +356,10 @@ class UrlShortenerTest extends TestCase
         $response = $this->get("/{$shortenedCode}");
 
         $response->assertRedirect('https://cached.example.com');
-        
+
         // Should not query database
         $this->assertDatabaseMissing('urls', [
-            'shortened_url' => $shortenedCode
+            'shortened_url' => $shortenedCode,
         ]);
     }
 
@@ -370,12 +370,12 @@ class UrlShortenerTest extends TestCase
         // Create a URL with a specific shortened code
         Url::create([
             'original_url' => 'https://first.com',
-            'shortened_url' => 'abcd'
+            'shortened_url' => 'abcd',
         ]);
 
         // Mock to force collision by checking if we get different codes
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://second.com'
+            'original_url' => 'https://second.com',
         ]);
 
         $response->assertStatus(201);
@@ -393,7 +393,7 @@ class UrlShortenerTest extends TestCase
         // Make 11 requests (limit is 10 per minute)
         for ($i = 0; $i < 11; $i++) {
             $response = $this->postJson('/api/shorten', [
-                'original_url' => 'https://example.com'
+                'original_url' => 'https://example.com',
             ]);
 
             if ($i < 10) {
@@ -409,13 +409,13 @@ class UrlShortenerTest extends TestCase
         // Note: This test may be limited by captcha validation
         // In a real scenario, you'd configure test captcha keys or mock the validator
         // For now, we test that rate limiting structure is in place
-        
+
         // Make 11 requests - rate limiting should kick in
         // Even if captcha validation fails, rate limiting should still apply
         for ($i = 0; $i < 11; $i++) {
             $response = $this->post('/', [
                 'original_url' => 'https://example.com',
-                'g-recaptcha-response' => 'test-captcha'
+                'g-recaptcha-response' => 'test-captcha',
             ]);
 
             // Rate limiting should apply regardless of validation errors
@@ -432,11 +432,11 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'analytics123'
+            'shortened_url' => 'analytics123',
         ]);
 
         $this->withHeaders([
-            'Referer' => 'https://referrer.com/page'
+            'Referer' => 'https://referrer.com/page',
         ])->get('/analytics123');
 
         $url->refresh();
@@ -452,7 +452,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'analytics456'
+            'shortened_url' => 'analytics456',
         ]);
 
         $this->get('/analytics456');
@@ -468,7 +468,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'analytics789'
+            'shortened_url' => 'analytics789',
         ]);
 
         $this->get('/analytics789');
@@ -483,7 +483,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'analytics100'
+            'shortened_url' => 'analytics100',
         ]);
 
         // Generate 105 analytics entries
@@ -491,7 +491,7 @@ class UrlShortenerTest extends TestCase
         for ($i = 0; $i < 105; $i++) {
             $analytics[] = [
                 'timestamp' => now()->toIso8601String(),
-                'referer_domain' => 'example.com'
+                'referer_domain' => 'example.com',
             ];
         }
         $url->update(['analytics' => $analytics]);
@@ -509,7 +509,7 @@ class UrlShortenerTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'analyticsmulti'
+            'shortened_url' => 'analyticsmulti',
         ]);
 
         $this->get('/analyticsmulti');
@@ -527,12 +527,12 @@ class UrlShortenerTest extends TestCase
     public function test_permanent_url_is_cached_for_14_days(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         $data = $response->json();
         $shortenedCode = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
-        
+
         // Check cache exists
         $cached = Cache::get("shortened_url:{$shortenedCode}");
         $this->assertEquals('https://example.com', $cached);
@@ -542,12 +542,12 @@ class UrlShortenerTest extends TestCase
     {
         $response = $this->postJson('/api/shorten', [
             'original_url' => 'https://example.com',
-            'minutes' => 30
+            'minutes' => 30,
         ]);
 
         $data = $response->json();
         $shortenedCode = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
-        
+
         // Check cache exists
         $this->assertNotNull(Cache::get("shortened_url:{$shortenedCode}"));
     }
@@ -557,14 +557,14 @@ class UrlShortenerTest extends TestCase
     public function test_shortened_url_has_correct_format(): void
     {
         $response = $this->postJson('/api/shorten', [
-            'original_url' => 'https://example.com'
+            'original_url' => 'https://example.com',
         ]);
 
         $data = $response->json();
-        
+
         $this->assertArrayHasKey('shortened_url', $data);
         $this->assertStringStartsWith('http', $data['shortened_url']);
-        
+
         // Extract the code
         $code = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
         $this->assertGreaterThanOrEqual(4, strlen($code));
@@ -574,17 +574,17 @@ class UrlShortenerTest extends TestCase
     public function test_multiple_urls_get_different_shortened_codes(): void
     {
         $codes = [];
-        
+
         for ($i = 0; $i < 5; $i++) {
             $response = $this->postJson('/api/shorten', [
-                'original_url' => "https://example{$i}.com"
+                'original_url' => "https://example{$i}.com",
             ]);
-            
+
             $data = $response->json();
             $code = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
             $codes[] = $code;
         }
-        
+
         // All codes should be unique
         $this->assertEquals(count($codes), count(array_unique($codes)));
     }

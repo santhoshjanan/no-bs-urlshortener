@@ -16,7 +16,7 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $this->assertInstanceOf(Url::class, $url);
@@ -28,7 +28,7 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $this->assertEquals(0, $url->clicks);
@@ -39,7 +39,7 @@ class UrlModelTest extends TestCase
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
-            'clicks' => 5
+            'clicks' => 5,
         ]);
 
         $url->refresh();
@@ -50,7 +50,7 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $this->assertNull($url->analytics);
@@ -61,14 +61,14 @@ class UrlModelTest extends TestCase
         $analytics = [
             [
                 'timestamp' => '2024-01-01T00:00:00Z',
-                'referer_domain' => 'example.com'
-            ]
+                'referer_domain' => 'example.com',
+            ],
         ];
 
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
-            'analytics' => $analytics
+            'analytics' => $analytics,
         ]);
 
         $this->assertIsArray($url->analytics);
@@ -83,7 +83,7 @@ class UrlModelTest extends TestCase
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
             'clicks' => 10,
-            'analytics' => []
+            'analytics' => [],
         ]);
 
         $this->assertEquals('https://example.com', $url->original_url);
@@ -99,7 +99,7 @@ class UrlModelTest extends TestCase
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
             'id' => 999, // Should be ignored
-            'created_at' => '2020-01-01 00:00:00' // Should be ignored
+            'created_at' => '2020-01-01 00:00:00', // Should be ignored
         ]);
 
         // ID should be auto-generated, not 999
@@ -114,13 +114,13 @@ class UrlModelTest extends TestCase
     {
         $analytics = [
             ['timestamp' => '2024-01-01T00:00:00Z', 'referer_domain' => 'example.com'],
-            ['timestamp' => '2024-01-02T00:00:00Z', 'referer_domain' => 'test.com']
+            ['timestamp' => '2024-01-02T00:00:00Z', 'referer_domain' => 'test.com'],
         ];
 
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
-            'analytics' => $analytics
+            'analytics' => $analytics,
         ]);
 
         $this->assertIsArray($url->analytics);
@@ -130,13 +130,13 @@ class UrlModelTest extends TestCase
     public function test_analytics_json_is_properly_decoded(): void
     {
         $analytics = [
-            ['timestamp' => '2024-01-01T00:00:00Z', 'referer_domain' => 'example.com']
+            ['timestamp' => '2024-01-01T00:00:00Z', 'referer_domain' => 'example.com'],
         ];
 
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'test123',
-            'analytics' => $analytics
+            'analytics' => $analytics,
         ]);
 
         // Refresh from database to test JSON encoding/decoding
@@ -150,11 +150,11 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $newAnalytics = [
-            ['timestamp' => '2024-01-01T00:00:00Z', 'referer_domain' => 'example.com']
+            ['timestamp' => '2024-01-01T00:00:00Z', 'referer_domain' => 'example.com'],
         ];
 
         $url->update(['analytics' => $newAnalytics]);
@@ -168,7 +168,7 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $this->assertNotNull($url->created_at);
@@ -179,7 +179,7 @@ class UrlModelTest extends TestCase
     {
         $url = Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'test123'
+            'shortened_url' => 'test123',
         ]);
 
         $originalUpdatedAt = $url->updated_at->timestamp;
@@ -199,7 +199,7 @@ class UrlModelTest extends TestCase
     {
         Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'unique123'
+            'shortened_url' => 'unique123',
         ]);
 
         // Attempting to create another URL with the same shortened_url should fail
@@ -207,7 +207,7 @@ class UrlModelTest extends TestCase
 
         Url::create([
             'original_url' => 'https://another.com',
-            'shortened_url' => 'unique123'
+            'shortened_url' => 'unique123',
         ]);
     }
 
@@ -218,7 +218,7 @@ class UrlModelTest extends TestCase
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'increment123',
-            'clicks' => 5
+            'clicks' => 5,
         ]);
 
         $url->increment('clicks');
@@ -233,7 +233,7 @@ class UrlModelTest extends TestCase
         $url = Url::create([
             'original_url' => 'https://example.com',
             'shortened_url' => 'increment456',
-            'clicks' => 5
+            'clicks' => 5,
         ]);
 
         $url->increment('clicks', 3);
@@ -249,7 +249,7 @@ class UrlModelTest extends TestCase
     {
         Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'find123'
+            'shortened_url' => 'find123',
         ]);
 
         $url = Url::where('shortened_url', 'find123')->first();
@@ -269,11 +269,10 @@ class UrlModelTest extends TestCase
     {
         Url::create([
             'original_url' => 'https://example.com',
-            'shortened_url' => 'exists123'
+            'shortened_url' => 'exists123',
         ]);
 
         $this->assertTrue(Url::where('shortened_url', 'exists123')->exists());
         $this->assertFalse(Url::where('shortened_url', 'nonexistent')->exists());
     }
 }
-
