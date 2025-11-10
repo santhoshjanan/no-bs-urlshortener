@@ -68,10 +68,27 @@ export default defineConfig({
                 passes: 2,
             },
         },
-        // Optimize chunk size
+        // Code splitting configuration
         rollupOptions: {
             output: {
-                manualChunks: undefined,
+                // Intelligent code splitting
+                manualChunks(id) {
+                    // Vendor chunk: All dependencies from node_modules
+                    if (id.includes('node_modules')) {
+                        // Split axios into its own chunk (it's large)
+                        if (id.includes('axios')) {
+                            return 'vendor-axios';
+                        }
+                        // Other node_modules go into vendor chunk
+                        return 'vendor';
+                    }
+
+                    // Split Vibe Brutalism UI framework into separate chunk
+                    // This is loaded on all pages but can be cached separately
+                    if (id.includes('vibe-brutalism.js')) {
+                        return 'ui-framework';
+                    }
+                }
             }
         }
     },
