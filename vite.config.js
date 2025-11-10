@@ -57,4 +57,22 @@ export default defineConfig({
         }),
         purgeCSSPlugin(),
     ],
+    build: {
+        // Target modern browsers to reduce bundle size
+        target: 'es2020',
+        // Enable minification
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true, // Remove console.log in production
+                passes: 2,
+            },
+        },
+        // Optimize chunk size
+        rollupOptions: {
+            output: {
+                manualChunks: undefined,
+            }
+        }
+    },
 });

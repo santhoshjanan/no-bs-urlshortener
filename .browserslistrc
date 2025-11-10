@@ -1,0 +1,17 @@
+# Target modern browsers only (last 2 years)
+# This reduces bundle size by removing unnecessary polyfills
+
+# Modern browsers with ES modules support
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Edge versions
+
+# Exclude dead browsers
+not dead
+
+# Only browsers with >0.2% market share
+> 0.2%
+
+# Exclude IE 11 and older
+not IE 11
