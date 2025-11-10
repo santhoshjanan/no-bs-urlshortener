@@ -10,6 +10,7 @@ use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class UrlRedirectService
 {
@@ -29,6 +30,14 @@ class UrlRedirectService
 
     public function handleRedirect(string $code, Request $request): RedirectResponse
     {
+        // structured logging for monitoring (privacy: do not log full UA in long-term storage)
+        Log::info('URL redirect attempt', [
+            'code' => $code,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'referer' => $request->header('referer'),
+        ]);
+
         $url = $this->urlRepository->findByShortenedCode($code);
 
         if ($url === null) {

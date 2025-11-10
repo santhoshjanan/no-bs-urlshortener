@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app:
+    image: urlshortener:latest
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 512M
+  # add other services (db, redis, queue, web) as needed in your production compose
