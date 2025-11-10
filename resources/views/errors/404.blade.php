@@ -1,6 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Trusted Types Policy - Must be loaded first -->
+    <script nonce="{{ $cspNonce }}">
+        // Create Trusted Types policies for safe script loading
+        if (window.trustedTypes && trustedTypes.createPolicy) {
+            // Default policy for general use
+            trustedTypes.createPolicy('default', {
+                createScriptURL: (url) => {
+                    // Allow same-origin and whitelisted external scripts
+                    const allowedOrigins = [
+                        location.origin,
+                        'https://www.google.com',
+                        'https://www.gstatic.com',
+                        'https://www.googletagmanager.com',
+                        'https://www.clarity.ms'
+                    ];
+
+                    try {
+                        const urlObj = new URL(url, location.origin);
+                        if (allowedOrigins.some(origin => urlObj.href.startsWith(origin))) {
+                            return urlObj.href;
+                        }
+                    } catch (e) {
+                        console.error('Invalid URL for script:', url);
+                    }
+                    throw new TypeError('Script URL not allowed: ' + url);
+                },
+                createHTML: (html) => html,
+                createScript: (script) => script
+            });
+
+            // Specific policy for Microsoft Clarity
+            trustedTypes.createPolicy('clarity-policy', {
+                createScriptURL: (url) => {
+                    if (url.startsWith('https://www.clarity.ms/tag/')) {
+                        return url;
+                    }
+                    throw new TypeError('Only Clarity scripts allowed');
+                }
+            });
+        }
+    </script>
+
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +53,7 @@
     @if(env('GOOGLE_ANALYTICS_ID'))
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_ANALYTICS_ID') }}"></script>
-    <script>
+    <script nonce="{{ $cspNonce }}">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -26,16 +68,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if(env('MICROSOFT_CLARITY_ID'))
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ $cspNonce }}">
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            t=l.createElement(r);
+            t.async=1;
+
+            // Use Trusted Types policy if available
+            var clarityURL = "https://www.clarity.ms/tag/"+i;
+            if (window.trustedTypes && trustedTypes.createPolicy) {
+                var policy = trustedTypes.defaultPolicy || trustedTypes.createPolicy('clarity-policy', {
+                    createScriptURL: function(url) { return url; }
+                });
+                t.src = policy.createScriptURL(clarityURL);
+            } else {
+                t.src = clarityURL;
+            }
+
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "{{ env('MICROSOFT_CLARITY_ID') }}");
     </script>
     @endif
 
-    <style>
+    <style nonce="{{ $cspNonce }}">
         body {
             min-height: 100vh;
             display: flex;

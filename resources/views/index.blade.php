@@ -1,5 +1,5 @@
 @push('scripts')
-    <script>
+    <script nonce="{{ $cspNonce }}">
         // Lazy load reCAPTCHA only when user interacts with the form
         let recaptchaLoaded = false;
 
@@ -7,9 +7,20 @@
             if (recaptchaLoaded) return;
             recaptchaLoaded = true;
 
-            // Load reCAPTCHA API
+            // Load reCAPTCHA API with Trusted Types support
             const script = document.createElement('script');
-            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+
+            // Use Trusted Types policy if available
+            const scriptURL = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            if (window.trustedTypes && trustedTypes.createPolicy) {
+                const policy = trustedTypes.defaultPolicy || trustedTypes.createPolicy('recaptcha-policy', {
+                    createScriptURL: (url) => url
+                });
+                script.src = policy.createScriptURL(scriptURL);
+            } else {
+                script.src = scriptURL;
+            }
+
             script.async = true;
             script.defer = true;
             script.onload = function() {
@@ -156,7 +167,7 @@
 
 @include('partials.footer')
 
-<script>
+<script nonce="{{ $cspNonce }}">
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
             // Use vibe-brutalism toast
