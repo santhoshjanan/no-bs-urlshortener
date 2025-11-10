@@ -4,25 +4,37 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
+use App\Repositories\UrlRepository;
+use App\Services\UrlValidationService;
+use App\Events\UrlRedirected;
+use Illuminate\Support\Facades\Event;
+use App\Models\Url;
+use Symfony\Component\HttpFoundation\Response;
 
 class UrlRedirectService
 {
-    private UrlValidator $validator;
+    private UrlRepository $urlRepository;
+    private UrlValidationService $validator;
 
-    public function __construct(UrlValidator $validator)
+    public function __construct(UrlRepository $urlRepository, UrlValidationService $validator)
     {
+        $this->urlRepository = $urlRepository;
         $this->validator = $validator;
     }
 
-    public function safeRedirect(string $url): RedirectResponse
+    public function resolveTargetByCode(string $code): ?string
     {
-        if (!$this->validator->isValid($url)) {
-            abort(400, 'Invalid redirect URL');
+        $url = $this->urlRepository->findByShortenedCode($code);
+        if ($url === null) {
+            return null;
         }
 
-        // use away() so Laravel doesn't treat this as an internal route
-        return Redirect::away($url, 302);
+        if (!$this->validator->isValid($url->target_url)) {
+            return null;
+        }
+
+        Event::dispatch(new UrlRedirected($url));
+
+        return $url->target_url;
     }
 }
