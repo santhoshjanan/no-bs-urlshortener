@@ -1,5 +1,42 @@
 @push('scripts')
-    {!! NoCaptcha::renderJs() !!}
+    <script>
+        // Lazy load reCAPTCHA only when user interacts with the form
+        let recaptchaLoaded = false;
+
+        function loadRecaptcha() {
+            if (recaptchaLoaded) return;
+            recaptchaLoaded = true;
+
+            // Load reCAPTCHA API
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            script.async = true;
+            script.defer = true;
+            script.onload = function() {
+                // Render reCAPTCHA when script is loaded
+                if (window.grecaptcha) {
+                    grecaptcha.render('recaptcha-container', {
+                        'sitekey': '{{ config('no-captcha.sitekey') }}'
+                    });
+                }
+            };
+            document.head.appendChild(script);
+        }
+
+        // Load reCAPTCHA when user focuses on any form input
+        document.addEventListener('DOMContentLoaded', function() {
+            const formInputs = document.querySelectorAll('#original_url, #minutes');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', loadRecaptcha, { once: true });
+            });
+
+            // Also load on form hover as a backup
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('mouseenter', loadRecaptcha, { once: true });
+            }
+        });
+    </script>
 @endpush
 
 @include('partials.header')
@@ -59,9 +96,14 @@
                             </small>
                         </div>
 
-                        <!-- reCAPTCHA -->
+                        <!-- reCAPTCHA (lazy loaded) -->
                         <div class="vb-form-group">
-                            {!! NoCaptcha::display() !!}
+                            <div id="recaptcha-container" class="g-recaptcha" data-sitekey="{{ config('no-captcha.sitekey') }}"></div>
+                            <noscript>
+                                <div style="padding: 1rem; background: var(--vb-warning); border: var(--vb-border);">
+                                    Please enable JavaScript to use reCAPTCHA.
+                                </div>
+                            </noscript>
                         </div>
                     </form>
 
