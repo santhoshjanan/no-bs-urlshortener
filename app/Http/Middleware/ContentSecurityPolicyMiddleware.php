@@ -30,7 +30,7 @@ class ContentSecurityPolicyMiddleware
             "font-src 'self' https://fonts.gstatic.com",
             "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com",
             "connect-src 'self' https://www.google-analytics.com https://www.clarity.ms https://region1.google-analytics.com https://analytics.google.com",
-            "frame-src https://www.google.com/recaptcha/",
+            'frame-src https://www.google.com/recaptcha/',
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'",
@@ -43,7 +43,7 @@ class ContentSecurityPolicyMiddleware
         // Report-only mode: monitors violations without breaking the app
         $trustedTypesPolicy = implode('; ', [
             "require-trusted-types-for 'script'",
-            "trusted-types default recaptcha-policy clarity-policy"
+            'trusted-types default recaptcha-policy clarity-policy',
         ]);
 
         // Use report-only mode for testing (comment out after testing)
