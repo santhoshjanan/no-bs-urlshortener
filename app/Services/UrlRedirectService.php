@@ -6,35 +6,54 @@ namespace App\Services;
 
 use App\Repositories\UrlRepository;
 use App\Services\UrlValidationService;
-use App\Events\UrlRedirected;
-use Illuminate\Support\Facades\Event;
-use App\Models\Url;
-use Symfony\Component\HttpFoundation\Response;
+use App\Services\AnalyticsService;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 
 class UrlRedirectService
 {
     private UrlRepository $urlRepository;
     private UrlValidationService $validator;
+    private AnalyticsService $analyticsService;
 
-    public function __construct(UrlRepository $urlRepository, UrlValidationService $validator)
-    {
+    public function __construct(
+        UrlRepository $urlRepository,
+        UrlValidationService $validator,
+        AnalyticsService $analyticsService
+    ) {
         $this->urlRepository = $urlRepository;
         $this->validator = $validator;
+        $this->analyticsService = $analyticsService;
     }
 
-    public function resolveTargetByCode(string $code): ?string
+    public function handleRedirect(string $code, Request $request): RedirectResponse
     {
         $url = $this->urlRepository->findByShortenedCode($code);
+
         if ($url === null) {
-            return null;
+            // record a 404 hit for analysis/monitoring (implementation in AnalyticsService)
+            $this->analyticsService->track404($code, $request);
+            abort(404);
         }
 
-        if (!$this->validator->isValid($url->target_url)) {
-            return null;
+        // record redirect (privacy-friendly) and ensure single DB/cache op
+        $this->analyticsService->trackRedirect($url, $request);
+
+        // prefer original_url field; fall back to legacy target_url if present
+        $destination = $url->original_url ?? $url->target_url ?? null;
+        if ($destination === null || !$this->validator->isValid((string) $destination)) {
+            // defensive: treat invalid destination as not found
+            $this->analyticsService->track404($code, $request);
+            abort(404);
         }
 
-        Event::dispatch(new UrlRedirected($url));
+        return $this->safeRedirect((string) $destination);
+    }
 
-        return $url->target_url;
+    private function safeRedirect(string $url): RedirectResponse
+    {
+        // away() prevents Laravel from treating it as an internal route
+        return Redirect::away($url, 302);
     }
 }
