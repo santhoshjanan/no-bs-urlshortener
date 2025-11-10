@@ -12,7 +12,7 @@
     </script>
     @endif
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - URL Not Found | No BS URL Shortener</title>
     <meta name="description" content="The shortened URL you're looking for doesn't exist or has expired.">
 
