@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class RedirectFlowIntegrationTest extends TestCase
 {
@@ -15,7 +15,7 @@ class RedirectFlowIntegrationTest extends TestCase
     {
         $unknown = 'no-such-code-123';
 
-        $resp = $this->get('/' . $unknown);
+        $resp = $this->get('/'.$unknown);
         $resp->assertStatus(404);
 
         // Optional: assert analytics entry recorded for 404s if implementation stores them

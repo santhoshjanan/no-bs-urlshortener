@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Repositories\UrlRepository;
-use App\Services\UrlValidationService;
-use App\Services\AnalyticsService;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class UrlRedirectService
 {
     private UrlRepository $urlRepository;
+
     private UrlValidationService $validator;
+
     private AnalyticsService $analyticsService;
 
     public function __construct(
@@ -51,7 +51,7 @@ class UrlRedirectService
 
         // prefer original_url field; fall back to legacy target_url if present
         $destination = $url->original_url ?? $url->target_url ?? null;
-        if ($destination === null || !$this->validator->isValid((string) $destination)) {
+        if ($destination === null || ! $this->validator->isValid((string) $destination)) {
             // defensive: treat invalid destination as not found
             $this->analyticsService->track404($code, $request);
             abort(404);

@@ -6,6 +6,4 @@ namespace App\Exceptions;
 
 use RuntimeException;
 
-final class UrlNotFoundException extends RuntimeException
-{
-}
+final class UrlNotFoundException extends RuntimeException {}

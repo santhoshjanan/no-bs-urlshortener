@@ -6,15 +6,18 @@ namespace App\Services;
 
 use App\Models\Url;
 use App\Repositories\UrlRepository;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UrlShorteningService
 {
     private UrlRepository $urlRepository;
+
     private CacheService $cacheService;
+
     private const MAX_ATTEMPTS = 5;
+
     private const CODE_LENGTH = 6;
 
     public function __construct(UrlRepository $urlRepository, CacheService $cacheService)
@@ -37,7 +40,7 @@ class UrlShorteningService
                 return $this->createShortenedUrl($targetUrl, $attempt + 1);
             }
 
-            $url = new Url();
+            $url = new Url;
             $url->target_url = $targetUrl;
             $url->shortened_url = $code;
             $url->save();

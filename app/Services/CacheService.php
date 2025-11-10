@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
 use App\Models\Url;
-use DateTimeImmutable;
-use DateInterval;
+use Illuminate\Support\Facades\Cache;
 
 class CacheService
 {

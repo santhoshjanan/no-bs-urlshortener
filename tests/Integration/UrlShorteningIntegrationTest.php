@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
+use App\Models\Url;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use App\Models\Url;
+use Tests\TestCase;
 
 class UrlShorteningIntegrationTest extends TestCase
 {
@@ -17,7 +17,7 @@ class UrlShorteningIntegrationTest extends TestCase
     public function test_complete_url_shortening_flow(): void
     {
         // create payload
-        $original = 'https://example.com/path?' . Str::random(6);
+        $original = 'https://example.com/path?'.Str::random(6);
         $payload = ['url' => $original];
 
         // call API (assumes route /api/shorten -> returns {code})
@@ -39,7 +39,7 @@ class UrlShorteningIntegrationTest extends TestCase
         $this->assertEquals($original, $cached->original_url);
 
         // perform redirect
-        $redirectResp = $this->get('/' . $code);
+        $redirectResp = $this->get('/'.$code);
         $redirectResp->assertStatus(302);
         $this->assertStringStartsWith($original, $redirectResp->headers->get('Location'));
 

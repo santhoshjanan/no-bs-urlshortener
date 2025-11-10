@@ -15,9 +15,9 @@ Route::post('/shorten', [UrlController::class, 'api_shortener'])
 Route::get('/{shortened}', [UrlController::class, 'redirect']);
 
 Route::get('/health', function () {
-	return response()->json([
-		'status' => 'healthy',
-		'timestamp' => now()->toISOString(),
-		'version' => config('app.version'),
-	]);
+    return response()->json([
+        'status' => 'healthy',
+        'timestamp' => now()->toISOString(),
+        'version' => config('app.version'),
+    ]);
 });

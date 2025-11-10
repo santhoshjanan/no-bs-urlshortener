@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\AnalyticsRepository;
 use App\Models\Url;
+use App\Repositories\AnalyticsRepository;
 
 class AnalyticsService
 {

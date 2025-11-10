@@ -6,6 +6,4 @@ namespace App\Exceptions;
 
 use RuntimeException;
 
-final class InvalidUrlException extends RuntimeException
-{
-}
+final class InvalidUrlException extends RuntimeException {}

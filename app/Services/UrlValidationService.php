@@ -7,6 +7,7 @@ namespace App\Services;
 class UrlValidationService
 {
     private const ALLOWED_SCHEMES = ['http', 'https'];
+
     private const BLOCKED_DOMAINS = [
         'malware.com',
         'phishing.net',
@@ -20,7 +21,7 @@ class UrlValidationService
         }
 
         // Enforce http/https prefix early per project guideline
-        if (!preg_match('/^https?:\\/\\//i', $url)) {
+        if (! preg_match('/^https?:\\/\\//i', $url)) {
             return false;
         }
 
@@ -29,7 +30,7 @@ class UrlValidationService
         }
 
         $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
-        if (!in_array($scheme, self::ALLOWED_SCHEMES, true)) {
+        if (! in_array($scheme, self::ALLOWED_SCHEMES, true)) {
             return false;
         }
 
@@ -38,7 +39,7 @@ class UrlValidationService
             return false;
         }
 
-        return !$this->isBlockedDomain($host);
+        return ! $this->isBlockedDomain($host);
     }
 
     private function isBlockedDomain(string $host): bool
@@ -48,7 +49,7 @@ class UrlValidationService
             if ($host === $blocked) {
                 return true;
             }
-            if (substr($host, - (strlen($blocked) + 1)) === '.' . $blocked) {
+            if (substr($host, -(strlen($blocked) + 1)) === '.'.$blocked) {
                 return true;
             }
         }

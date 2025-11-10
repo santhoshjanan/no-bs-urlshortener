@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 use Tests\Utilities\UrlTestTrait;
 
 class AnalyticsIntegrationTest extends TestCase
@@ -20,7 +20,7 @@ class AnalyticsIntegrationTest extends TestCase
             'shortened_url' => 'analytics123',
         ]);
 
-        $resp = $this->get('/' . $url->shortened_url);
+        $resp = $this->get('/'.$url->shortened_url);
         $resp->assertStatus(302);
 
         $this->assertDatabaseHas('url_analytics', [

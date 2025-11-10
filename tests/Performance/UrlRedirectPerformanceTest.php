@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Performance;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Url;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class UrlRedirectPerformanceTest extends TestCase
 {
@@ -20,7 +20,7 @@ class UrlRedirectPerformanceTest extends TestCase
         ]);
 
         $start = microtime(true);
-        $resp = $this->get('/' . $url->shortened_url);
+        $resp = $this->get('/'.$url->shortened_url);
         $duration = microtime(true) - $start;
 
         $resp->assertStatus(302);

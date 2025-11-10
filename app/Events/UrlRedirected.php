@@ -13,6 +13,7 @@ class UrlRedirected
     use Dispatchable, SerializesModels;
 
     public Url $url;
+
     public array $meta;
 
     public function __construct(Url $url, array $meta = [])
