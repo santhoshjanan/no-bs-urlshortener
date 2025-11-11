@@ -1,6 +1,8 @@
 import './bootstrap';
 import './recaptcha';
 import './register-sw';
+import './analytics-loader';
+import './image-loader';
 
 const loadVibeBrutalism = () => import('./vibe-brutalism.js');
 
