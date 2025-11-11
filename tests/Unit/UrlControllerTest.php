@@ -4,10 +4,12 @@ namespace Tests\Unit;
 
 use App\Http\Controllers\UrlController;
 use App\Models\Url;
+use App\Services\RecaptchaService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
+use Mockery;
 use Tests\TestCase;
 
 class UrlControllerTest extends TestCase
@@ -16,10 +18,21 @@ class UrlControllerTest extends TestCase
 
     protected UrlController $controller;
 
+    protected RecaptchaService $recaptchaMock;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->controller = new UrlController;
+
+        // Create a mock for RecaptchaService
+        $this->recaptchaMock = Mockery::mock(RecaptchaService::class);
+
+        // Bind the mock to the container
+        $this->app->instance(RecaptchaService::class, $this->recaptchaMock);
+
+        // Create controller with mocked dependency
+        $this->controller = new UrlController($this->recaptchaMock);
+
         Cache::flush();
     }
 

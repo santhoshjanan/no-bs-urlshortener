@@ -6,7 +6,8 @@
       "Bash(docker exec:*)",
       "Bash(curl:*)",
       "Bash(pngquant:*)",
-      "Bash(sips:*)"
+      "Bash(sips:*)",
+      "Bash(php artisan test:*)"
     ],
     "deny": [],
     "ask": []

@@ -9,21 +9,24 @@ use Illuminate\Support\Facades\Http;
 class RecaptchaService
 {
     private ?string $siteKey;
+
     private ?string $secretKey;
+
     private float $scoreThreshold;
 
     public function __construct()
     {
         $this->siteKey = config('services.recaptcha.site_key');
         $this->secretKey = config('services.recaptcha.secret_key');
-        $this->scoreThreshold = (float) config('services.recaptcha.score_threshold', 0.5);
+        $threshold = config('services.recaptcha.score_threshold', 0.5);
+        $this->scoreThreshold = $threshold !== null ? (float) $threshold : 0.5;
     }
 
     /**
      * Verify reCAPTCHA v3 token
      *
-     * @param string $token The token from the frontend
-     * @param string $action The action name (should match frontend)
+     * @param  string  $token  The token from the frontend
+     * @param  string  $action  The action name (should match frontend)
      * @return array ['success' => bool, 'score' => float|null, 'error' => string|null]
      */
     public function verify(string $token, string $action = 'submit'): array

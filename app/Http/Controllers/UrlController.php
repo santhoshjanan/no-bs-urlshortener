@@ -11,9 +11,7 @@ use InvalidArgumentException;
 
 class UrlController extends Controller
 {
-    public function __construct(private readonly RecaptchaService $recaptcha)
-    {
-    }
+    public function __construct(private readonly RecaptchaService $recaptcha) {}
 
     public function generateRandomString(int $minLength, int $maxLength): string
     {
