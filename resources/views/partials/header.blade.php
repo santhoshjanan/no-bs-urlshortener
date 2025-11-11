@@ -33,6 +33,10 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ asset('build/manifest.webmanifest') }}">
+    <meta name="theme-color" content="#000000">
+
     <!-- Primary Meta Tags -->
     <title>{{ $title ?? 'No BS URL Shortener - Privacy-First Link Shortening' }}</title>
     <meta name="description" content="{{ $description ?? 'Privacy-first URL shortening service with no tracking. Anonymous, fast, and secure. Free API available.' }}">
