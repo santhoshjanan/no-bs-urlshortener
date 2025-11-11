@@ -1,3 +1,6 @@
+/* Base typography + font assets */
+@import './fonts.css';
+
 /* Import Vibe Brutalism CSS */
 @import './vibe-brutalism.css';
 

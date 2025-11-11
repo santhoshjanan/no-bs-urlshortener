@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Url;
+use App\Services\RecaptchaService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Mockery;
 use Tests\TestCase;
 
 class UrlShortenerTest extends TestCase
@@ -15,6 +17,12 @@ class UrlShortenerTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     // ==================== Home Page Tests ====================
@@ -224,21 +232,25 @@ class UrlShortenerTest extends TestCase
 
     public function test_web_shortener_requires_captcha(): void
     {
+        $this->mockRecaptcha(shouldVerify: false);
+
         $response = $this->from('/')->post('/', [
             'original_url' => 'https://example.com',
         ]);
 
         // Laravel redirects back with errors on validation failure for web routes
         $response->assertStatus(302);
-        $response->assertSessionHasErrors(['g-recaptcha-response']);
+        $response->assertSessionHasErrors(['recaptcha_token']);
         $response->assertRedirect('/');
     }
 
     public function test_web_shortener_validates_url(): void
     {
+        $this->mockRecaptcha();
+
         $response = $this->from('/')->post('/', [
             'original_url' => 'not-a-url',
-            'g-recaptcha-response' => 'valid-captcha',
+            'recaptcha_token' => 'test-token',
         ]);
 
         // Laravel redirects back with errors on validation failure for web routes
@@ -249,19 +261,21 @@ class UrlShortenerTest extends TestCase
 
     public function test_web_shortener_creates_url_with_valid_captcha(): void
     {
-        // For testing, we'll use a workaround: test the API endpoint instead
-        // which doesn't require captcha, or configure test captcha keys
-        // The web form captcha requirement is tested in the validation test above
+        $this->mockRecaptcha();
 
-        // This test verifies that when all validation passes, a URL is created
-        // In a real scenario, you'd configure NOCAPTCHA_SECRET with a test key
-        // that always returns true for 'test-captcha-response'
+        $response = $this->from('/')->post('/', [
+            'original_url' => 'https://example.com/path',
+            'minutes' => 0,
+            'recaptcha_token' => 'test-token',
+        ]);
 
-        // For now, we'll skip this test or test through API which doesn't need captcha
-        $this->markTestSkipped('Requires test reCAPTCHA keys to properly test web form submission');
+        $response->assertStatus(200);
+        $response->assertViewIs('index');
+        $response->assertViewHas('shortened_url');
 
-        // Alternative: Test that the endpoint structure is correct
-        // The actual captcha validation is tested in test_web_shortener_requires_captcha
+        $this->assertDatabaseHas('urls', [
+            'original_url' => 'https://example.com/path',
+        ]);
     }
 
     // ==================== Redirect Tests ====================
@@ -406,6 +420,8 @@ class UrlShortenerTest extends TestCase
 
     public function test_web_form_rate_limiting(): void
     {
+        $this->mockRecaptcha();
+
         // Note: This test may be limited by captcha validation
         // In a real scenario, you'd configure test captcha keys or mock the validator
         // For now, we test that rate limiting structure is in place
@@ -415,7 +431,7 @@ class UrlShortenerTest extends TestCase
         for ($i = 0; $i < 11; $i++) {
             $response = $this->post('/', [
                 'original_url' => 'https://example.com',
-                'g-recaptcha-response' => 'test-captcha',
+                'recaptcha_token' => 'test-token',
             ]);
 
             // Rate limiting should apply regardless of validation errors
@@ -587,5 +603,25 @@ class UrlShortenerTest extends TestCase
 
         // All codes should be unique
         $this->assertEquals(count($codes), count(array_unique($codes)));
+    }
+
+    private function mockRecaptcha(bool $shouldVerify = true, ?array $response = null): void
+    {
+        config([
+            'services.recaptcha.site_key' => 'test-site-key',
+            'services.recaptcha.secret_key' => 'test-secret-key',
+        ]);
+
+        $mock = Mockery::mock(RecaptchaService::class);
+        $mock->shouldReceive('isEnabled')->andReturnTrue();
+
+        if ($shouldVerify) {
+            $mock->shouldReceive('verify')
+                ->andReturn($response ?? ['success' => true, 'score' => 0.9, 'error' => null]);
+        } else {
+            $mock->shouldReceive('verify')->never();
+        }
+
+        $this->app->instance(RecaptchaService::class, $mock);
     }
 }

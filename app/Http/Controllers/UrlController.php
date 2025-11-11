@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Url;
+use App\Services\RecaptchaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -10,6 +11,10 @@ use InvalidArgumentException;
 
 class UrlController extends Controller
 {
+    public function __construct(private readonly RecaptchaService $recaptcha)
+    {
+    }
+
     public function generateRandomString(int $minLength, int $maxLength): string
     {
         if ($minLength > $maxLength) {
@@ -25,28 +30,41 @@ class UrlController extends Controller
 
     public function web_shortener(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'original_url' => [
                 'required',
                 'url',
                 'regex:/^https?:\/\//i',
             ],
             'minutes' => 'nullable|integer|min:0|max:525960',
-            'g-recaptcha-response' => 'required|captcha',
+            'recaptcha_token' => 'required|string',
         ],
             [
                 'original_url.regex' => 'Only HTTP and HTTPS URLs are allowed.',
                 'minutes.integer' => 'Minutes must be a valid number.',
                 'minutes.min' => 'Minutes cannot be negative.',
                 'minutes.max' => 'Minutes cannot exceed 525960 (365 days).',
-                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
-                'g-recaptcha-response.captcha' => 'Captcha error! Try again. If the problem persists, reach out to me using the contact icon in the footer.',
+                'recaptcha_token.required' => 'Please verify that you are not a robot.',
             ],
         );
 
-        $minutes = $request->input('minutes', 0);
+        if (! $this->recaptcha->isEnabled()) {
+            return back()
+                ->withErrors(['recaptcha' => 'reCAPTCHA is not configured. Please contact support.'])
+                ->withInput();
+        }
 
-        return view('index', $this->createShortUrl($request->original_url, $minutes));
+        $verification = $this->recaptcha->verify($validated['recaptcha_token'], 'shorten_form');
+
+        if (! ($verification['success'] ?? false)) {
+            return back()
+                ->withErrors(['recaptcha' => $verification['error'] ?? 'Unable to verify that you are human.'])
+                ->withInput();
+        }
+
+        $minutes = (int) ($validated['minutes'] ?? 0);
+
+        return view('index', $this->createShortUrl($validated['original_url'], $minutes));
     }
 
     public function api_shortener(Request $request)

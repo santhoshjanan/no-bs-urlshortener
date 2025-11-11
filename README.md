@@ -90,13 +90,10 @@ DB_DATABASE=url_shortener_server
 DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
 
-# Google reCAPTCHA (required for web form)
-NOCAPTCHA_SITEKEY=your_recaptcha_site_key
-NOCAPTCHA_SECRET=your_recaptcha_secret_key
-
-# Analytics (optional)
-GOOGLE_ANALYTICS_ID=your_ga_id
-MICROSOFT_CLARITY_ID=your_clarity_id
+# Google reCAPTCHA v3 (required for web form)
+RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
+RECAPTCHA_SCORE_THRESHOLD=0.5
 
 # Cache (recommended)
 CACHE_STORE=redis
@@ -204,10 +201,9 @@ php artisan test --coverage
 
 ### Environment Variables
 
-- `NOCAPTCHA_SITEKEY` - Google reCAPTCHA site key
-- `NOCAPTCHA_SECRET` - Google reCAPTCHA secret key
-- `GOOGLE_ANALYTICS_ID` - Google Analytics tracking ID (optional)
-- `MICROSOFT_CLARITY_ID` - Microsoft Clarity tracking ID (optional)
+- `RECAPTCHA_SITE_KEY` - Google reCAPTCHA v3 site key
+- `RECAPTCHA_SECRET_KEY` - Google reCAPTCHA v3 secret key
+- `RECAPTCHA_SCORE_THRESHOLD` - Minimum acceptable score (default 0.5)
 - `CACHE_STORE` - Cache driver (redis, database, etc.)
 - `DB_*` - Database configuration
 

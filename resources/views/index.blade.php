@@ -1,6 +1,4 @@
-@push('scripts')
-    {!! NoCaptcha::renderJs() !!}
-@endpush
+@php($recaptchaSiteKey = config('services.recaptcha.site_key'))
 
 @include('partials.header')
         <div class="vb-container" style="margin-top: 3rem;">
@@ -18,8 +16,18 @@
             <!-- Main Card -->
             <div class="vb-card-static" style="max-width: 900px; margin: 0 auto;">
                 <div class="vb-card-body">
-                    <form action="{{ route('shorten') }}" method="POST">
+                    <form
+                        action="{{ route('shorten') }}"
+                        method="POST"
+                        @if($recaptchaSiteKey) data-recaptcha="v3" data-recaptcha-action="shorten_form" @endif
+                    >
                         @csrf
+                        @if (! $recaptchaSiteKey)
+                            <div class="vb-alert vb-alert-warning" style="margin-bottom: 1.5rem;">
+                                reCAPTCHA is not configured. Add `RECAPTCHA_SITE_KEY` and `RECAPTCHA_SECRET_KEY`
+                                to your environment file to enable the form.
+                            </div>
+                        @endif
 
                         <!-- URL Input Group -->
                         <div class="vb-form-group">
@@ -60,10 +68,17 @@
                         </div>
 
                         <!-- reCAPTCHA -->
-                        <div class="vb-form-group">
-                            {!! NoCaptcha::display() !!}
-                        </div>
+                        @if ($recaptchaSiteKey)
+                            <input type="hidden" name="recaptcha_token" value="">
+                            <div data-recaptcha-error class="vb-form-help" style="margin-top: 0.5rem;"></div>
+                        @endif
                     </form>
+
+                    @if ($errors->has('recaptcha') || $errors->has('recaptcha_token'))
+                        <div class="vb-alert vb-alert-danger" style="margin-top: 1.5rem;">
+                            {{ $errors->first('recaptcha') ?? $errors->first('recaptcha_token') }}
+                        </div>
+                    @endif
 
                     <!-- Shortened URL Result -->
                     @if (isset($shortened_url))
