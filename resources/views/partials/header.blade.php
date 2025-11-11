@@ -28,9 +28,7 @@
         <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     @endif
 
-    <link rel="preload" href="{{ asset('fonts/space-grotesk/SpaceGrotesk-SemiBold.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ asset('fonts/space-grotesk/SpaceGrotesk-Bold.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ asset('fonts/space-grotesk/SpaceGrotesk-Black.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/space-grotesk/SpaceGrotesk-Variable.woff2') }}" as="font" type="font/woff2" crossorigin>
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
