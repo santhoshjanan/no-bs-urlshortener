@@ -18,7 +18,7 @@ class UrlShorteningService
 
     private const MAX_ATTEMPTS = 5;
 
-    private const CODE_LENGTH = 6;
+    private const CODE_LENGTH = 10;
 
     public function __construct(UrlRepository $urlRepository, CacheService $cacheService)
     {

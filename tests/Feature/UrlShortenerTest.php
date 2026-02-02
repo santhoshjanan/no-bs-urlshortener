@@ -583,8 +583,8 @@ class UrlShortenerTest extends TestCase
 
         // Extract the code
         $code = basename(parse_url($data['shortened_url'], PHP_URL_PATH));
-        $this->assertGreaterThanOrEqual(4, strlen($code));
-        $this->assertLessThanOrEqual(6, strlen($code));
+        $this->assertGreaterThanOrEqual(8, strlen($code));
+        $this->assertLessThanOrEqual(10, strlen($code));
     }
 
     public function test_multiple_urls_get_different_shortened_codes(): void
