@@ -94,7 +94,7 @@ class UrlController extends Controller
 
         for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
             try {
-                $shortened = $this->generateRandomString(4, 6);
+                $shortened = $this->generateRandomString(8, 10);
                 $cacheKey = "shortened_url:{$shortened}";
 
                 // If minutes > 0, this is a temporary URL - store only in Redis

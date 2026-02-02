@@ -6,9 +6,9 @@ namespace App\Constants;
 
 final class UrlConstants
 {
-    public const MIN_CODE_LENGTH = 4;
+    public const MIN_CODE_LENGTH = 8;
 
-    public const MAX_CODE_LENGTH = 6;
+    public const MAX_CODE_LENGTH = 10;
 
     public const MAX_MINUTES_PER_YEAR = 525960;
 
