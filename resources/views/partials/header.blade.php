@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{env('GOOGLE_ANALYTICS_ID')}}"></script>
+    @php($recaptchaSiteKey = config('services.recaptcha.site_key'))
+    @php($googleAnalyticsId = config('services.analytics.google_id'))
+    @php($clarityId = config('services.analytics.clarity_id'))
+    
+    @if($googleAnalyticsId)
+    <!-- Google tag (gtag.js) - only loaded if configured -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{$googleAnalyticsId}}"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', '{{env("GOOGLE_ANALYTICS_ID")}}');
+    gtag('config', '{{$googleAnalyticsId}}');
     </script>
+    @endif
+    
+    @if($clarityId)
+    <!-- Microsoft Clarity - only loaded if configured -->
     <script type="text/javascript" async>
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "{{env('MICROSOFT_CLARITY_ID')}}");
+        })(window, document, "clarity", "script", "{{$clarityId}}");
     </script>
+    @endif
 
-    @php($recaptchaSiteKey = config('services.recaptcha.site_key'))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">

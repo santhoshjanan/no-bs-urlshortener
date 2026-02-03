@@ -41,4 +41,9 @@ return [
         'score_threshold' => env('RECAPTCHA_SCORE_THRESHOLD', 0.5),
     ],
 
+    'analytics' => [
+        'google_id' => env('GOOGLE_ANALYTICS_ID'),
+        'clarity_id' => env('MICROSOFT_CLARITY_ID'),
+    ],
+
 ];

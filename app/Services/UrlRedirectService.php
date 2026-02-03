@@ -30,12 +30,10 @@ class UrlRedirectService
 
     public function handleRedirect(string $code, Request $request): RedirectResponse
     {
-        // structured logging for monitoring (privacy: do not log full UA in long-term storage)
+        // structured logging for monitoring (privacy-friendly - no PII)
         Log::info('URL redirect attempt', [
             'code' => $code,
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'referer' => $request->header('referer'),
+            'referer_domain' => $request->header('referer') ? parse_url($request->header('referer'), PHP_URL_HOST) : null,
         ]);
 
         $url = $this->urlRepository->findByShortenedCode($code);
